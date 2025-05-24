@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>카카오맵 API 테스트</title>
+    <style>
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        #map { 
+            width: 100%; 
+            height: 400px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .api-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .log {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            height: 150px;
+            overflow-y: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🗺️ 카카오맵 API 테스트</h1>
+        
+        <div class="api-info">
+            <h3>📋 API 정보</h3>
+            <p><strong>JavaScript 키:</strong> <code>b0f49a85cf2dfefcd8ac377de88d38a3</code></p>
+            <p><strong>현재 도메인:</strong> <code id="currentDomain"></code></p>
+            <p><strong>프로토콜:</strong> <code id="currentProtocol"></code></p>
+        </div>
+
+        <div id="statusContainer">
+            <div class="status info">🔍 카카오맵 API 테스트를 시작합니다...</div>
+        </div>
+
+        <div>
+            <button onclick="testKakaoMapLoad()">🗺️ 카카오맵 로딩 테스트</button>
+            <button onclick="testDomainSettings()">🔧 도메인 설정 확인</button>
+            <button onclick="showMockMap()">🎭 Mock 지도 표시</button>
+            <button onclick="clearLog()">🗑️ 로그 지우기</button>
+        </div>
+
+        <div id="map"></div>
+
+        <div class="log" id="logContainer">
+            <div id="log">카카오맵 API 테스트 로그...</div>
+        </div>
+
+        <div class="api-info">
+            <h3>🛠️ 문제 해결 가이드</h3>
+            <ol>
+                <li><strong>도메인 등록</strong>: <a href="https://developers.kakao.com" target="_blank">카카오 개발자 콘솔</a>에서 현재 도메인을 등록하세요</li>
+                <li><strong>로컬 서버</strong>: 파일을 직접 열지 말고 HTTP 서버로 실행하세요</li>
+                <li><strong>HTTPS 필요</strong>: 일부 기능은 HTTPS에서만 작동합니다</li>
+                <li><strong>브라우저 콘솔</strong>: F12를 눌러 오류 메시지를 확인하세요</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // 현재 환경 정보 표시
+        document.getElementById('currentDomain').textContent = window.location.hostname || 'localhost';
+        document.getElementById('currentProtocol').textContent = window.location.protocol;
+
+        // 로그 함수
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('log');
+            const colorMap = {
+                'info': '#00ff00',
+                'error': '#ff4444',
+                'warning': '#ffaa00',
+                'success': '#44ff44'
+            };
+            
+            logElement.innerHTML += `<div style="color: ${colorMap[type]}">[${timestamp}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '로그 지워짐...';
+        }
+
+        function updateStatus(message, type) {
+            const statusContainer = document.getElementById('statusContainer');
+            statusContainer.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // 카카오맵 로딩 테스트
+        function testKakaoMapLoad() {
+            log('카카오맵 API 로딩 시작...', 'info');
+            updateStatus('🔄 카카오맵 API를 로딩하고 있습니다...', 'warning');
+
+            // 기존 스크립트 제거
+            const existingScript = document.querySelector('script[src*="dapi.kakao.com"]');
+            if (existingScript) {
+                existingScript.remove();
+                log('기존 카카오맵 스크립트 제거됨', 'info');
+            }
+
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=b0f49a85cf2dfefcd8ac377de88d38a3';
+            
+            script.onload = function() {
+                log('✅ 카카오맵 스크립트 로딩 성공!', 'success');
+                
+                if (typeof kakao !== 'undefined' && kakao.maps) {
+                    log('✅ kakao.maps 객체 확인됨', 'success');
+                    
+                    try {
+                        initializeKakaoMap();
+                        updateStatus('✅ 카카오맵이 성공적으로 로딩되었습니다!', 'success');
+                    } catch (error) {
+                        log(`❌ 지도 초기화 오류: ${error.message}`, 'error');
+                        updateStatus('❌ 지도 초기화에 실패했습니다. 도메인 설정을 확인하세요.', 'error');
+                    }
+                } else {
+                    log('❌ kakao.maps 객체를 찾을 수 없음', 'error');
+                    updateStatus('❌ 카카오맵 객체를 찾을 수 없습니다.', 'error');
+                }
+            };
+            
+            script.onerror = function() {
+                log('❌ 카카오맵 스크립트 로딩 실패', 'error');
+                updateStatus('❌ 카카오맵 스크립트 로딩에 실패했습니다. 네트워크를 확인하세요.', 'error');
+            };
+            
+            document.head.appendChild(script);
+        }
+
+        // 카카오맵 초기화
+        function initializeKakaoMap() {
+            const container = document.getElementById('map');
+            const options = {
+                center: new kakao.maps.LatLng(37.2636, 127.0286), // 수원시 영통구
+                level: 5
+            };
+            
+            const map = new kakao.maps.Map(container, options);
+            
+            // 마커 추가
+            const markerPosition = new kakao.maps.LatLng(37.2636, 127.0286);
+            const marker = new kakao.maps.Marker({
+                position: markerPosition
+            });
+            marker.setMap(map);
+            
+            // 정보창 추가
+            const infowindow = new kakao.maps.InfoWindow({
+                content: '<div style="padding:5px;font-size:12px;">수원시 영통구<br>상권 분석 지점</div>'
+            });
+            infowindow.open(map, marker);
+            
+            log('✅ 카카오맵 초기화 완료 - 마커 및 정보창 표시됨', 'success');
+        }
+
+        // 도메인 설정 확인
+        function testDomainSettings() {
+            log('도메인 설정 확인 중...', 'info');
+            
+            const domain = window.location.hostname;
+            const protocol = window.location.protocol;
+            const port = window.location.port;
+            
+            log(`현재 도메인: ${domain}`, 'info');
+            log(`현재 프로토콜: ${protocol}`, 'info');
+            log(`현재 포트: ${port || '기본포트'}`, 'info');
+            
+            const recommendations = [];
+            
+            if (protocol === 'file:') {
+                recommendations.push('⚠️ file:// 프로토콜 사용 중. HTTP 서버를 사용하세요.');
+            }
+            
+            if (domain === '' || domain === 'localhost' || domain === '127.0.0.1') {
+                recommendations.push('📋 카카오 개발자 콘솔에 다음 도메인들을 등록하세요:');
+                recommendations.push('  - http://localhost:8080');
+                recommendations.push('  - http://127.0.0.1:8080');
+                recommendations.push('  - file://');
+            }
+            
+            if (recommendations.length > 0) {
+                updateStatus('⚠️ 도메인 설정이 필요할 수 있습니다.', 'warning');
+                recommendations.forEach(rec => log(rec, 'warning'));
+            } else {
+                updateStatus('✅ 도메인 설정이 올바른 것 같습니다.', 'success');
+            }
+        }
+
+        // Mock 지도 표시
+        function showMockMap() {
+            log('Mock 지도 표시 중...', 'info');
+            updateStatus('🎭 Mock 지도를 표시합니다. (실제 카카오맵 대신)', 'info');
+            
+            const mapContainer = document.getElementById('map');
+            mapContainer.innerHTML = `
+                <div style="width:100%;height:100%;background:linear-gradient(45deg,#e3f2fd,#bbdefb);position:relative;border-radius:8px;">
+                    <div style="position:absolute;top:20px;left:20px;background:white;padding:10px;border-radius:5px;box-shadow:0 2px 5px rgba(0,0,0,0.2);">
+                        📍 수원시 영통구 광교로 (Mock Map)
+                    </div>
+                    
+                    <!-- 상권 정보 오버레이 -->
+                    <div style="position:absolute;bottom:20px;right:20px;background:rgba(0,0,0,0.8);color:white;padding:15px;border-radius:8px;max-width:200px;">
+                        <h6 style="margin:0 0 10px 0;color:#ffd700;">📊 상권 분석 결과</h6>
+                        <div style="margin:5px 0;">👥 유동인구: 1,234명/일</div>
+                        <div style="margin:5px 0;">🏪 경쟁업체: 12개</div>
+                        <div style="margin:5px 0;">💰 예상매출: ₩3.2M/월</div>
+                        <div style="margin:5px 0;">⭐ 상권점수: 85/100</div>
+                    </div>
+                    
+                    <!-- Mock 마커들 -->
+                    <div style="position:absolute;top:40%;left:45%;transform:translate(-50%,-50%);">
+                        <div style="background:#ff4444;color:white;padding:5px 10px;border-radius:15px;font-size:20px;">📍</div>
+                        <div style="background:white;padding:3px 8px;border-radius:3px;font-size:10px;margin-top:2px;box-shadow:0 1px 3px rgba(0,0,0,0.3);">분석 지점</div>
+                    </div>
+                    
+                    <div style="position:absolute;top:60%;left:30%;">
+                        <div style="color:#2196F3;font-size:16px;">🏪</div>
+                        <div style="font-size:8px;background:white;padding:1px 3px;border-radius:2px;">경쟁업체</div>
+                    </div>
+                    
+                    <div style="position:absolute;top:35%;left:65%;">
+                        <div style="color:#FF9800;font-size:16px;">☕</div>
+                        <div style="font-size:8px;background:white;padding:1px 3px;border-radius:2px;">카페</div>
+                    </div>
+                    
+                    <div style="position:absolute;top:70%;left:55%;">
+                        <div style="color:#4CAF50;font-size:16px;">🚇</div>
+                        <div style="font-size:8px;background:white;padding:1px 3px;border-radius:2px;">지하철역</div>
+                    </div>
+                    
+                    <!-- 범례 -->
+                    <div style="position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.9);padding:10px;border-radius:5px;font-size:11px;">
+                        <div style="margin:2px 0;"><span style="color:#4CAF50;">●</span> 고밀도 지역</div>
+                        <div style="margin:2px 0;"><span style="color:#FF9800;">●</span> 중밀도 지역</div>
+                        <div style="margin:2px 0;"><span style="color:#2196F3;">●</span> 저밀도 지역</div>
+                    </div>
+                </div>
+            `;
+            
+            log('✅ Mock 지도 표시 완료', 'success');
+        }
+
+        // 페이지 로드시 자동 테스트
+        window.addEventListener('load', function() {
+            log('페이지 로딩 완료', 'success');
+            testDomainSettings();
+            
+            // 3초 후 자동으로 카카오맵 테스트
+            setTimeout(() => {
+                log('자동 카카오맵 테스트 시작...', 'info');
+                testKakaoMapLoad();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

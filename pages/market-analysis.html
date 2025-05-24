@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상권 분석 - 상권 마스터</title>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="../css/style.css" as="style">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script">
+    
+    <!-- Critical CSS Only -->
+    <style>
+        /* Critical Above-fold CSS */
+        .navbar { background: white !important; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .bg-gradient-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .map-container { position: relative; overflow: hidden; min-height: 500px; }
+        .map-loading { 
+            display: flex; align-items: center; justify-content: center; 
+            height: 500px; background: #f8f9fa;
+        }
+        .performance-stats {
+            position: fixed; top: 100px; right: 20px; z-index: 1000;
+            background: rgba(0,0,0,0.8); color: white; padding: 10px;
+            border-radius: 5px; font-size: 12px; display: none;
+        }
+    </style>
+    
+    <!-- Non-blocking CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../css/style.css" media="print" onload="this.media='all'">
+    
+    <!-- Performance Monitor -->
+    <script>
+        const perfStart = performance.now();
+        window.addEventListener('load', () => {
+            const loadTime = (performance.now() - perfStart).toFixed(0);
+            console.log(`⚡ 페이지 로딩 시간: ${loadTime}ms`);
+            
+            // Performance stats display
+            const stats = document.createElement('div');
+            stats.className = 'performance-stats';
+            stats.innerHTML = `
+                <div><strong>⚡ 성능 정보</strong></div>
+                <div>로딩 시간: ${loadTime}ms</div>
+                <div>목표: <2000ms</div>
+                <div>상태: ${loadTime < 2000 ? '✅ 양호' : '⚠️ 개선필요'}</div>
+            `;
+            document.body.appendChild(stats);
+            
+            // Show for 3 seconds
+            setTimeout(() => stats.style.display = 'block', 100);
+            setTimeout(() => stats.style.display = 'none', 3000);
+        });
+    </script>
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.html">
+                <i class="fas fa-chart-line text-primary me-2 fs-4"></i>
+                <span class="fw-bold text-primary">상권 마스터</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="market-analysis.html">
+                            <i class="fas fa-rocket me-1"></i>상권 분석 (최적화)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ai-marketing.html">AI 마케팅</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">대시보드</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="guide.html">이용 가이드</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <a class="nav-link" href="#">로그인</a>
+                    <a class="btn btn-primary btn-sm ms-2" href="#">무료 체험</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="py-5 bg-gradient-primary">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="text-white">
+                        <h1 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-tachometer-alt me-2"></i>
+                            고속 상권 분석
+                        </h1>
+                        <p class="lead mb-3">
+                            ⚡ 성능 최적화된 GPT-4o 기반 실시간 상권 분석
+                        </p>
+                        <div class="performance-badges">
+                            <span class="badge bg-success me-2">
+                                <i class="fas fa-bolt me-1"></i>2초 로딩
+                            </span>
+                            <span class="badge bg-warning text-dark me-2">
+                                <i class="fas fa-map me-1"></i>즉시 지도
+                            </span>
+                            <span class="badge bg-info">
+                                <i class="fas fa-chart-line me-1"></i>실시간 차트
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-warning" onclick="downloadReport()">
+                            <i class="fas fa-download me-2"></i>리포트 다운로드
+                        </button>
+                        <button class="btn btn-outline-light" onclick="shareAnalysis()">
+                            <i class="fas fa-share me-2"></i>공유
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Analysis Section -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">
+                                <i class="fas fa-zap text-warning me-2"></i>
+                                빠른 분석 (10초 완료)
+                            </h5>
+                            <form id="quickAnalysisForm" class="row g-3">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" id="addressInput" 
+                                           placeholder="주소 입력 (예: 수원시 영통구)" 
+                                           value="수원시 영통구 광교로">
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="businessType">
+                                        <option value="cafe" selected>카페/커피숍</option>
+                                        <option value="restaurant">음식점</option>
+                                        <option value="retail">소매업</option>
+                                        <option value="beauty">미용/네일</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="analysisDepth">
+                                        <option value="basic">기본 분석 (3초)</option>
+                                        <option value="detailed" selected>상세 분석 (10초)</option>
+                                        <option value="premium">프리미엄 (30초)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100" id="analyzeBtn">
+                                        <i class="fas fa-search me-1"></i>분석
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Results Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Map Container -->
+                <div class="col-lg-8">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-map-marked-alt me-2"></i>
+                                상권 지도 분석
+                            </h5>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary active" data-layer="traffic">유동인구</button>
+                                <button class="btn btn-outline-primary" data-layer="sales">매출밀도</button>
+                                <button class="btn btn-outline-primary" data-layer="competitor">경쟁강도</button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <!-- 지도 로딩 중 표시 -->
+                            <div id="mapLoading" class="map-loading">
+                                <div class="text-center">
+                                    <div class="spinner-border text-primary mb-3" role="status">
+                                        <span class="visually-hidden">로딩중...</span>
+                                    </div>
+                                    <h5 class="text-muted">지도 초기화 중...</h5>
+                                    <p class="text-muted">잠시만 기다려주세요</p>
+                                </div>
+                            </div>
+                            
+                            <!-- 실제 지도 -->
+                            <div id="analysisMap" class="map-container" style="height: 500px; display: none;">
+                                <!-- 카카오맵이 여기에 로드됩니다 -->
+                            </div>
+                            
+                            <!-- 지도 로딩 실패 시 -->
+                            <div id="mapError" class="map-loading" style="display: none;">
+                                <div class="text-center">
+                                    <i class="fas fa-map fa-5x text-muted mb-3"></i>
+                                    <h5 class="text-muted">지도 로딩 실패</h5>
+                                    <p class="text-muted">Mock 데이터로 분석을 계속합니다</p>
+                                    <button class="btn btn-primary" onclick="initializeMockMap()">
+                                        <i class="fas fa-chart-area me-2"></i>Mock 지도 보기
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Results -->
+                <div class="col-lg-4">
+                    <div class="row g-3">
+                        <!-- KPI Cards -->
+                        <div class="col-12">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h3 class="mb-0" id="scoreValue">85</h3>
+                                            <p class="mb-0">상권 점수</p>
+                                        </div>
+                                        <i class="fas fa-star fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h4 class="mb-0" id="trafficValue">1.2K</h4>
+                                    <small>일일 유동인구</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-6">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <h4 class="mb-0" id="competitorValue">12</h4>
+                                    <small>경쟁업체 수</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI 인사이트 -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-robot text-primary me-2"></i>
+                                        GPT-4o AI 분석
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <div id="aiInsight" class="text-muted">
+                                        분석 중입니다...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 차트 -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">시간대별 유동인구</h6>
+                                </div>
+                                <div class="card-body p-2">
+                                    <canvas id="trafficChart" width="300" height="150"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 성능 최적화를 위한 JS는 페이지 하단에서 비동기 로딩 -->
+    <script>
+        // 즉시 실행 - 핵심 기능만
+        const quickAnalysis = {
+            isAnalyzing: false,
+            
+            init() {
+                document.getElementById('quickAnalysisForm').addEventListener('submit', this.handleSubmit.bind(this));
+                // 페이지 로드 즉시 기본 분석 실행
+                setTimeout(() => this.runAnalysis(), 1000);
+            },
+            
+            handleSubmit(e) {
+                e.preventDefault();
+                if (!this.isAnalyzing) {
+                    this.runAnalysis();
+                }
+            },
+            
+            runAnalysis() {
+                this.isAnalyzing = true;
+                const btn = document.getElementById('analyzeBtn');
+                const originalText = btn.innerHTML;
+                
+                // 로딩 상태
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>분석중';
+                btn.disabled = true;
+                
+                // Mock 분석 (실제 API 대신)
+                setTimeout(() => {
+                    this.showResults();
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    this.isAnalyzing = false;
+                }, 2000);
+            },
+            
+            showResults() {
+                // 빠른 결과 표시
+                document.getElementById('scoreValue').textContent = Math.floor(Math.random() * 20 + 80);
+                document.getElementById('trafficValue').textContent = (Math.random() * 2 + 0.8).toFixed(1) + 'K';
+                document.getElementById('competitorValue').textContent = Math.floor(Math.random() * 10 + 8);
+                
+                const insights = [
+                    "우수한 입지입니다. 점심시간 할인 이벤트를 추천합니다.",
+                    "유동인구가 많은 지역입니다. SNS 마케팅을 강화하세요.",
+                    "경쟁이 치열한 지역입니다. 차별화된 서비스가 필요합니다.",
+                    "성장 잠재력이 높은 상권입니다. 적극적인 마케팅을 권합니다."
+                ];
+                
+                document.getElementById('aiInsight').textContent = insights[Math.floor(Math.random() * insights.length)];
+                
+                // 지도 초기화 시도
+                this.initializeMap();
+            },
+            
+            initializeMap() {
+                // 지도 로딩 상태 숨기기
+                document.getElementById('mapLoading').style.display = 'none';
+                
+                // 카카오맵 사용 가능한지 확인
+                if (typeof kakao !== 'undefined' && kakao.maps) {
+                    try {
+                        this.loadKakaoMap();
+                    } catch (error) {
+                        console.warn('카카오맵 로딩 실패:', error);
+                        this.showMapError();
+                    }
+                } else {
+                    console.warn('카카오맵 API 없음 - Mock 지도 표시');
+                    this.showMapError();
+                }
+            },
+            
+            loadKakaoMap() {
+                const mapContainer = document.getElementById('analysisMap');
+                const mapOption = {
+                    center: new kakao.maps.LatLng(37.2636, 127.0286), // 수원시 영통구
+                    level: 5
+                };
+                
+                const map = new kakao.maps.Map(mapContainer, mapOption);
+                mapContainer.style.display = 'block';
+                
+                // 마커 추가
+                const markerPosition = new kakao.maps.LatLng(37.2636, 127.0286);
+                const marker = new kakao.maps.Marker({
+                    position: markerPosition
+                });
+                marker.setMap(map);
+                
+                console.log('✅ 카카오맵 로딩 성공');
+            },
+            
+            showMapError() {
+                document.getElementById('mapError').style.display = 'flex';
+            }
+        };
+        
+        // 즉시 초기화
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => quickAnalysis.init());
+        } else {
+            quickAnalysis.init();
+        }
+        
+        // Mock 지도 초기화 함수 (전역)
+        function initializeMockMap() {
+            const mapContainer = document.getElementById('analysisMap');
+            mapContainer.innerHTML = `
+                <div style="height: 500px; background: linear-gradient(45deg, #e3f2fd, #bbdefb); 
+                            display: flex; align-items: center; justify-content: center; position: relative;">
+                    <div class="text-center">
+                        <i class="fas fa-map-marked-alt fa-5x text-primary mb-3"></i>
+                        <h4 class="text-primary">Mock 상권 분석 지도</h4>
+                        <p class="text-muted">실제 카카오맵 대신 데모용 지도입니다</p>
+                        <div class="row g-2 mt-3">
+                            <div class="col-4">
+                                <div class="bg-success text-white p-2 rounded">
+                                    <small>고밀도 지역</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="bg-warning text-dark p-2 rounded">
+                                    <small>중밀도 지역</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="bg-info text-white p-2 rounded">
+                                    <small>저밀도 지역</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mock 마커들 -->
+                    <div style="position: absolute; top: 30%; left: 40%;">
+                        <i class="fas fa-map-marker-alt fa-2x text-danger"></i>
+                    </div>
+                    <div style="position: absolute; top: 60%; left: 60%;">
+                        <i class="fas fa-store fa-lg text-primary"></i>
+                    </div>
+                    <div style="position: absolute; top: 45%; left: 25%;">
+                        <i class="fas fa-coffee fa-lg text-warning"></i>
+                    </div>
+                </div>
+            `;
+            
+            mapContainer.style.display = 'block';
+            document.getElementById('mapError').style.display = 'none';
+        }
+        
+        // 유틸리티 함수들
+        function downloadReport() {
+            alert('📊 분석 리포트 다운로드 기능 (데모)');
+        }
+        
+        function shareAnalysis() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '상권 분석 결과',
+                    text: '상권 마스터로 분석한 결과를 확인해보세요!',
+                    url: window.location.href
+                });
+            } else {
+                alert('🔗 공유 링크가 클립보드에 복사되었습니다! (데모)');
+            }
+        }
+    </script>
+
+    <!-- 비동기 로딩: Chart.js 및 카카오맵 -->
+    <script async src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script async>
+        // Chart.js 로딩 후 차트 초기화
+        function initializeCharts() {
+            const trafficCtx = document.getElementById('trafficChart');
+            if (trafficCtx && typeof Chart !== 'undefined') {
+                new Chart(trafficCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['9시', '12시', '15시', '18시', '21시'],
+                        datasets: [{
+                            data: [120, 180, 95, 165, 85],
+                            borderColor: '#007bff',
+                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { 
+                            y: { display: false }, 
+                            x: { display: true } 
+                        }
+                    }
+                });
+            } else {
+                // Chart.js 로딩 대기
+                setTimeout(initializeCharts, 500);
+            }
+        }
+        
+        // 차트 초기화 시작
+        setTimeout(initializeCharts, 1000);
+    </script>
+
+    <!-- 카카오맵 비동기 로딩 -->
+    <script>
+        // 실제 카카오맵 API 키 적용
+        function loadKakaoMapScript() {
+            console.log('🗺️ 카카오맵 API 로딩 시작...');
+            
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=b0f49a85cf2dfefcd8ac377de88d38a3&libraries=services&autoload=false';
+            
+            script.onload = function() {
+                console.log('✅ 카카오맵 스크립트 로딩 성공');
+                
+                // autoload=false이므로 수동으로 로드
+                kakao.maps.load(function() {
+                    console.log('✅ 카카오맵 API 초기화 완료');
+                    
+                    // 지도 로딩 상태 업데이트
+                    const mapLoading = document.getElementById('mapLoading');
+                    const mapContainer = document.getElementById('analysisMap');
+                    
+                    if (mapLoading) mapLoading.style.display = 'none';
+                    if (mapContainer) mapContainer.style.display = 'block';
+                    
+                    // quickAnalysis 객체가 있다면 지도 초기화
+                    if (typeof quickAnalysis !== 'undefined' && quickAnalysis.loadKakaoMap) {
+                        try {
+                            quickAnalysis.loadKakaoMap();
+                        } catch (error) {
+                            console.error('❌ 지도 초기화 오류:', error);
+                            showMapErrorWithDetails(error.message);
+                        }
+                    }
+                });
+            };
+            
+            script.onerror = function() {
+                console.warn('⚠️ 카카오맵 API 로딩 실패');
+                showMapErrorWithDetails('스크립트 로딩 실패');
+            };
+            
+            // 타임아웃 설정 (10초)
+            setTimeout(() => {
+                if (!window.kakao) {
+                    console.warn('⚠️ 카카오맵 로딩 타임아웃');
+                    showMapErrorWithDetails('로딩 타임아웃 (10초)');
+                }
+            }, 10000);
+            
+            document.head.appendChild(script);
+        }
+        
+        function showMapErrorWithDetails(errorMsg) {
+            const mapLoading = document.getElementById('mapLoading');
+            const mapError = document.getElementById('mapError');
+            
+            if (mapLoading) mapLoading.style.display = 'none';
+            if (mapError) {
+                mapError.style.display = 'flex';
+                
+                // 상세 오류 정보 추가
+                const errorDetails = mapError.querySelector('.text-center');
+                if (errorDetails) {
+                    errorDetails.innerHTML = `
+                        <i class="fas fa-exclamation-triangle fa-5x text-warning mb-3"></i>
+                        <h5 class="text-muted">카카오맵 로딩 실패</h5>
+                        <p class="text-muted">오류: ${errorMsg}</p>
+                        <div class="alert alert-info text-start mt-3">
+                            <h6>📋 해결 방법:</h6>
+                            <ol class="mb-0">
+                                <li><a href="https://developers.kakao.com" target="_blank">카카오 개발자 콘솔</a>에서 도메인 등록</li>
+                                <li>HTTP 서버로 실행 (file:// 대신)</li>
+                                <li>브라우저 F12 → Console에서 오류 확인</li>
+                            </ol>
+                        </div>
+                        <button class="btn btn-primary mt-3" onclick="initializeMockMap()">
+                            <i class="fas fa-chart-area me-2"></i>Mock 지도로 계속하기
+                        </button>
+                        <button class="btn btn-outline-secondary mt-3" onclick="location.reload()">
+                            <i class="fas fa-redo me-2"></i>다시 시도
+                        </button>
+                    `;
+                }
+            }
+        }
+        
+        // 카카오맵 로딩 시작 (2초 지연)
+        setTimeout(loadKakaoMapScript, 2000);
+    </script>
+        setTimeout(loadKakaoMapScript, 2000);
+    </script>
+
+    <!-- Bootstrap JS (필요시에만) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

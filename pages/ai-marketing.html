@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 마케팅 - 상권 마스터</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.html">
+                <i class="fas fa-chart-line text-primary me-2 fs-4"></i>
+                <span class="fw-bold text-primary">상권 마스터</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="market-analysis.html">상권 분석</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="ai-marketing.html">AI 마케팅</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">대시보드</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="guide.html">이용 가이드</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <a class="nav-link" href="#">로그인</a>
+                    <a class="btn btn-primary btn-sm ms-2" href="#">무료 체험</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="py-5 bg-gradient-success">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <div class="text-white">
+                        <h1 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-robot me-3"></i>
+                            GPT-4o & Claude 3.5 AI 마케팅
+                        </h1>
+                        <p class="lead mb-3">
+                            OpenAI GPT-4o와 Anthropic Claude 3.5 Sonnet이 협력하여 
+                            당신의 브랜드에 맞는 마케팅 콘텐츠를 자동으로 생성합니다
+                        </p>
+                        <div class="ai-models-info">
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <div class="ai-badge bg-white bg-opacity-20 p-2 rounded">
+                                        <small><i class="fas fa-brain me-1"></i> <strong>GPT-4o:</strong> 콘텐츠 생성</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="ai-badge bg-white bg-opacity-20 p-2 rounded">
+                                        <small><i class="fas fa-chart-line me-1"></i> <strong>Claude 3.5:</strong> 전략 분석</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-warning">
+                            <i class="fas fa-history me-2"></i>생성 히스토리
+                        </button>
+                        <button class="btn btn-outline-light">
+                            <i class="fas fa-cog me-2"></i>설정
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Content Generation Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Content Type Selector -->
+                <div class="col-lg-3">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-brain me-2"></i>콘텐츠 유형</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush">
+                                <button class="list-group-item list-group-item-action active" data-content="social">
+                                    <i class="fab fa-instagram me-2"></i>SNS 포스트
+                                </button>
+                                <button class="list-group-item list-group-item-action" data-content="ad">
+                                    <i class="fas fa-bullhorn me-2"></i>광고 문구
+                                </button>
+                                <button class="list-group-item list-group-item-action" data-content="event">
+                                    <i class="fas fa-calendar-star me-2"></i>이벤트 기획
+                                </button>
+                                <button class="list-group-item list-group-item-action" data-content="email">
+                                    <i class="fas fa-envelope me-2"></i>이메일 마케팅
+                                </button>
+                                <button class="list-group-item list-group-item-action" data-content="blog">
+                                    <i class="fas fa-blog me-2"></i>블로그 포스트
+                                </button>
+                                <button class="list-group-item list-group-item-action" data-content="review">
+                                    <i class="fas fa-star me-2"></i>리뷰 응답
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Settings -->
+                    <div class="card shadow-sm mt-4">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="fas fa-sliders-h me-2"></i>AI 설정</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">톤앤매너</label>
+                                <select class="form-select form-select-sm">
+                                    <option>친근하고 활발한</option>
+                                    <option>전문적이고 신뢰감 있는</option>
+                                    <option>유머러스하고 재미있는</option>
+                                    <option>고급스럽고 세련된</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">타겟 연령대</label>
+                                <select class="form-select form-select-sm">
+                                    <option>20-30대</option>
+                                    <option>30-40대</option>
+                                    <option>40-50대</option>
+                                    <option>전체</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">콘텐츠 길이</label>
+                                <select class="form-select form-select-sm">
+                                    <option>짧음 (1-2줄)</option>
+                                    <option>보통 (3-5줄)</option>
+                                    <option>길음 (5줄 이상)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="col-lg-9">
+                    <!-- SNS Post Content -->
+                    <div class="content-panel" id="social-content">
+                        <div class="card shadow-sm">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">SNS 포스트 생성</h5>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary active">Instagram</button>
+                                    <button class="btn btn-outline-primary">Facebook</button>
+                                    <button class="btn btn-outline-primary">Twitter</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form id="socialContentForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">업체명</label>
+                                            <input type="text" class="form-control" placeholder="예: 카페 온더로드">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">업종</label>
+                                            <select class="form-select">
+                                                <option>카페/커피숍</option>
+                                                <option>음식점</option>
+                                                <option>소매업</option>
+                                                <option>미용/네일</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">주요 메뉴/서비스</label>
+                                            <input type="text" class="form-control" placeholder="예: 아메리카노, 라떼, 디저트">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">포스트 목적</label>
+                                            <select class="form-select">
+                                                <option>신메뉴 홍보</option>
+                                                <option>할인 이벤트</option>
+                                                <option>일상 소통</option>
+                                                <option>고객 감사</option>
+                                                <option>계절 이벤트</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">특별한 요청사항 (선택)</label>
+                                            <textarea class="form-control" rows="2" placeholder="추가로 포함하고 싶은 내용이나 키워드"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="text-end mt-3">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-magic me-2"></i>AI 콘텐츠 생성
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Generated Content Display -->
+                        <div class="card shadow-sm mt-4" id="generatedContent" style="display: none;">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">생성된 콘텐츠</h5>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-success" onclick="regenerateContent()">
+                                        <i class="fas fa-redo me-1"></i>다시 생성
+                                    </button>
+                                    <button class="btn btn-success" onclick="copyContent()">
+                                        <i class="fas fa-copy me-1"></i>복사
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h6>📱 Instagram 포스트</h6>
+                                        <div class="social-preview bg-light rounded p-3 mb-3">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="bg-primary rounded-circle" style="width: 32px; height: 32px;"></div>
+                                                <strong class="ms-2">카페 온더로드</strong>
+                                            </div>
+                                            <div id="postContent" class="mb-2">
+                                                ☕️ 새로운 시즌, 새로운 맛! ✨<br><br>
+                                                오늘부터 가을 시즌 메뉴가 출시되었어요! 🍂<br>
+                                                따뜻한 시나몬 라떼와 달콤한 단풍 마카롱으로<br>
+                                                가을의 정취를 만끽해보세요 🧡<br><br>
+                                                📍 수원시 영통구 광교로<br>
+                                                🕐 오전 7시 - 오후 10시<br><br>
+                                                #카페온더로드 #가을메뉴 #시나몬라떼 #단풍마카롱 #수원카페 #광교카페
+                                            </div>
+                                            <div class="d-flex gap-3 text-muted small">
+                                                <span><i class="far fa-heart"></i> 좋아요</span>
+                                                <span><i class="far fa-comment"></i> 댓글</span>
+                                                <span><i class="far fa-paper-plane"></i> 공유</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h6>📊 예상 성과</h6>
+                                        <div class="bg-light rounded p-3">
+                                            <div class="row g-2 text-center">
+                                                <div class="col-4">
+                                                    <div class="h5 text-primary mb-0">+25%</div>
+                                                    <small>참여율 증가</small>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="h5 text-success mb-0">150+</div>
+                                                    <small>예상 좋아요</small>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="h5 text-warning mb-0">20+</div>
+                                                    <small>예상 댓글</small>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <h6 class="small"><i class="fas fa-lightbulb text-warning me-2"></i>AI 제안</h6>
+                                            <p class="small mb-0">
+                                                오후 2-4시에 게시하면 더 많은 참여를 얻을 수 있습니다. 
+                                                해시태그 #가을감성 추가를 고려해보세요.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other Content Panels (Hidden by default) -->
+                    <div class="content-panel" id="ad-content" style="display: none;">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">광고 문구 생성</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>광고 문구 생성 도구가 여기에 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-panel" id="event-content" style="display: none;">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">이벤트 기획</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>이벤트 기획 도구가 여기에 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-panel" id="email-content" style="display: none;">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">이메일 마케팅</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>이메일 마케팅 도구가 여기에 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-panel" id="blog-content" style="display: none;">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">블로그 포스트</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>블로그 포스트 생성 도구가 여기에 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-panel" id="review-content" style="display: none;">
+                        <div class="card shadow-sm">
+                            <div class="card-header">
+                                <h5 class="mb-0">리뷰 응답</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>리뷰 응답 생성 도구가 여기에 표시됩니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Generations Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="mb-4">최근 생성된 콘텐츠</h3>
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="badge bg-primary">Instagram</span>
+                                        <small class="text-muted">2시간 전</small>
+                                    </div>
+                                    <p class="card-text small">☕️ 새로운 시즌, 새로운 맛! ✨ 오늘부터 가을 시즌 메뉴가...</p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-primary btn-sm">복사</button>
+                                        <button class="btn btn-outline-secondary btn-sm">수정</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="badge bg-success">광고문구</span>
+                                        <small class="text-muted">5시간 전</small>
+                                    </div>
+                                    <p class="card-text small">지금 주문하면 30% 할인! 최고의 커피를 더 저렴하게...</p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-primary btn-sm">복사</button>
+                                        <button class="btn btn-outline-secondary btn-sm">수정</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <span class="badge bg-warning">이벤트</span>
+                                        <small class="text-muted">1일 전</small>
+                                    </div>
+                                    <p class="card-text small">🎉 고객 감사 이벤트! 리뷰 작성하고 아메리카노 무료로...</p>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-primary btn-sm">복사</button>
+                                        <button class="btn btn-outline-secondary btn-sm">수정</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Content type switching
+        document.querySelectorAll('[data-content]').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('[data-content]').forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Hide all content panels
+                document.querySelectorAll('.content-panel').forEach(panel => panel.style.display = 'none');
+                // Show target content panel
+                const targetPanel = document.getElementById(this.dataset.content + '-content');
+                if (targetPanel) targetPanel.style.display = 'block';
+            });
+        });
+
+        // Social content form submission
+        document.getElementById('socialContentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            generateSocialContent();
+        });
+
+        function generateSocialContent() {
+            const submitBtn = document.querySelector('#socialContentForm button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>AI 생성 중...';
+            submitBtn.disabled = true;
+
+            // Simulate AI generation
+            setTimeout(() => {
+                // Show generated content
+                document.getElementById('generatedContent').style.display = 'block';
+                document.getElementById('generatedContent').scrollIntoView({ behavior: 'smooth' });
+                
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+
+                // Show success toast
+                showToast('AI 콘텐츠가 성공적으로 생성되었습니다!', 'success');
+            }, 3000);
+        }
+
+        function regenerateContent() {
+            showToast('새로운 콘텐츠를 생성 중입니다...', 'info');
+            // Simulate regeneration
+            setTimeout(() => {
+                showToast('새로운 콘텐츠가 생성되었습니다!', 'success');
+            }, 2000);
+        }
+
+        function copyContent() {
+            const content = document.getElementById('postContent').innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                showToast('콘텐츠가 클립보드에 복사되었습니다!', 'success');
+            });
+        }
+
+        function showToast(message, type) {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container position-fixed top-0 end-0 p-3';
+                toastContainer.style.zIndex = '9999';
+                document.body.appendChild(toastContainer);
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'info'} border-0`;
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">${message}</div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Show toast
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+
+            // Remove toast after it's hidden
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+    </script>
+</body>
+</html>

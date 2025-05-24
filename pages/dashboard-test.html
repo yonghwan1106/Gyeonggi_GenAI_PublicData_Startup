@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>차트 테스트 - 상권 마스터</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">차트 테스트</h1>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>매출 추이</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>시간대별 방문현황</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="popularTimesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart');
+            if (salesCtx) {
+                new Chart(salesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['월', '화', '수', '목', '금', '토', '일'],
+                        datasets: [{
+                            label: '매출 (만원)',
+                            data: [280, 320, 310, 380, 350, 450, 420],
+                            borderColor: '#007bff',
+                            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+                console.log('Sales chart created successfully');
+            }
+
+            // Popular Times Chart
+            const popularTimesCtx = document.getElementById('popularTimesChart');
+            if (popularTimesCtx) {
+                new Chart(popularTimesCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['06', '08', '10', '12', '14', '16', '18', '20', '22'],
+                        datasets: [{
+                            label: '방문객 수',
+                            data: [45, 120, 180, 250, 95, 140, 220, 180, 85],
+                            backgroundColor: '#007bff',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+                console.log('Popular times chart created successfully');
+            }
+        });
+    </script>
+</body>
+</html>
