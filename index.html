@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상권 마스터 - 경기도 소상공인 특화 AI 마케팅 통합플랫폼</title>
+    
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="경기도 소상공인을 위한 AI 기반 상권 분석 및 마케팅 솔루션. 공공데이터와 생성형AI로 맞춤형 전략을 제공합니다.">
+    <meta name="keywords" content="상권분석, AI마케팅, 소상공인, 경기도, 공공데이터, 생성형AI">
+    <meta name="author" content="상권 마스터 팀">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="상권 마스터 - AI 마케팅 통합플랫폼">
+    <meta property="og:description" content="경기도 소상공인을 위한 AI 기반 상권 분석 및 마케팅 솔루션">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sangkwon-master.com">
+    <meta property="og:image" content="./assets/og-image.jpg">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+</head>
+<body>
+    
+    <!-- Competition Banner -->
+    <div class="competition-banner bg-warning text-dark py-2 text-center fw-bold">
+        <i class="fas fa-trophy me-2"></i>
+        2025년 경기도 생성형AI·공공데이터 활용 창업경진대회 출품작
+        <i class="fas fa-trophy ms-2"></i>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#home">
+                <i class="fas fa-chart-line text-primary me-2 fs-4"></i>
+                <span class="fw-bold text-primary">상권 마스터</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">서비스</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#data-sources">데이터 & AI</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./pages/market-analysis.html">상권 분석</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./pages/ai-marketing.html">AI 마케팅</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./pages/dashboard.html">대시보드</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#demo">데모</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pricing">가격</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">회사소개</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">로그인</a>
+                    <a class="btn btn-primary btn-sm ms-2" href="#" data-bs-toggle="modal" data-bs-target="#signupModal">무료 체험</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section bg-gradient-primary">
+        <div class="container">
+            <div class="row align-items-center min-vh-100 pt-5">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="display-4 fw-bold text-white mb-4">
+                            GPT-4o & Claude 3.5 기반<br>
+                            경기도 소상공인을 위한<br>
+                            <span class="text-warning">AI 마케팅 혁신</span>
+                        </h1>
+                        <p class="lead text-white-50 mb-4">
+                            경기도 공공데이터와 최신 생성형AI(GPT-4o, Claude 3.5 Sonnet)가 만나 창조하는 
+                            스마트한 상권 분석과 맞춤형 마케팅 전략. 
+                            복잡한 데이터 분석은 AI에게 맡기고, 당신은 사업 성장에만 집중하세요.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="./pages/dashboard.html" class="btn btn-warning btn-lg me-3">
+                                <i class="fas fa-chart-line me-2"></i>
+                                대시보드 체험
+                            </a>
+                            <a href="./pages/market-analysis.html" class="btn btn-outline-light btn-lg">
+                                <i class="fas fa-map-marked-alt me-2"></i>
+                                상권 분석 시작
+                            </a>
+                        </div>
+                        
+                        <!-- Hero Stats -->
+                        <div class="hero-stats mt-5">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="text-warning mb-0">50+</h3>
+                                        <small class="text-white-50">베타 테스터</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="text-warning mb-0">95%</h3>
+                                        <small class="text-white-50">만족도</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="stat-item">
+                                        <h3 class="text-warning mb-0">24/7</h3>
+                                        <small class="text-white-50">AI 지원</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="hero-image text-center">
+                        <div class="dashboard-preview bg-white rounded-3 shadow-lg p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h5 class="mb-0 text-dark">실시간 상권 대시보드</h5>
+                                <span class="badge bg-success">LIVE</span>
+                            </div>
+                            
+                            <!-- Mock Dashboard Content -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-4">
+                                    <div class="card bg-primary text-white">
+                                        <div class="card-body p-2 text-center">
+                                            <i class="fas fa-users mb-1"></i>
+                                            <div class="h6 mb-0">128</div>
+                                            <small>일일 방문</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card bg-success text-white">
+                                        <div class="card-body p-2 text-center">
+                                            <i class="fas fa-won-sign mb-1"></i>
+                                            <div class="h6 mb-0">3.2M</div>
+                                            <small>매출</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card bg-warning text-white">
+                                        <div class="card-body p-2 text-center">
+                                            <i class="fas fa-chart-line mb-1"></i>
+                                            <div class="h6 mb-0">+15%</div>
+                                            <small>성장률</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Mock Chart -->
+                            <div class="chart-placeholder bg-light rounded p-3">
+                                <canvas id="heroChart" width="300" height="150"></canvas>
+                            </div>
+                            
+                            <!-- AI Recommendation -->
+                            <div class="ai-recommendation mt-3 p-3 bg-light rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-robot text-primary me-2"></i>
+                                    <span class="fw-bold text-primary">AI 추천</span>
+                                </div>
+                                <p class="mb-0 small">
+                                    "점심시간 할인 이벤트를 진행하면 방문객이 23% 증가할 것으로 예상됩니다."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Down Indicator -->
+        <div class="scroll-indicator">
+            <a href="#features" class="text-white">
+                <i class="fas fa-chevron-down fa-2x"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold text-dark">핵심 서비스</h2>
+                    <p class="lead text-muted">AI와 빅데이터가 제공하는 3가지 핵심 솔루션</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Feature 1: 상권 분석 -->
+                <div class="col-lg-4">
+                    <div class="feature-card h-100 p-4 rounded-3 shadow-sm bg-white">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-map-marked-alt fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-robot text-primary me-2"></i>
+                            GPT-4o 기반 스마트 상권 분석
+                        </h4>
+                        <p class="text-muted mb-4">
+                            경기도 공공데이터(경기데이터드림, 상가정보 API)와 GPT-4o를 활용한 
+                            실시간 상권 분석으로 유동인구, 매출 트렌드, 경쟁업체 현황을 한눈에 파악하세요.
+                        </p>
+                        <ul class="feature-list list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>실시간 유동인구 분석</li>
+                            <li><i class="fas fa-check text-success me-2"></i>매출 예측 및 트렌드</li>
+                            <li><i class="fas fa-check text-success me-2"></i>경쟁업체 모니터링</li>
+                            <li><i class="fas fa-check text-success me-2"></i>최적 입지 추천</li>
+                        </ul>
+                        <a href="./pages/market-analysis.html" class="btn btn-outline-primary">상권 분석 체험</a>
+                    </div>
+                </div>
+                
+                <!-- Feature 2: AI 마케팅 -->
+                <div class="col-lg-4">
+                    <div class="feature-card h-100 p-4 rounded-3 shadow-sm bg-white">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-brain fa-3x text-success"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-brain text-success me-2"></i>
+                            Claude 3.5 & GPT-4o AI 마케팅 콘텐츠
+                        </h4>
+                        <p class="text-muted mb-4">
+                            Claude 3.5 Sonnet(전략 분석)과 GPT-4o(콘텐츠 생성)가 당신의 브랜드와 
+                            고객층에 맞는 마케팅 콘텐츠를 자동으로 생성하고 최적의 마케팅 전략을 제안합니다.
+                        </p>
+                        <ul class="feature-list list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>SNS 콘텐츠 자동 생성</li>
+                            <li><i class="fas fa-check text-success me-2"></i>맞춤형 광고 문구</li>
+                            <li><i class="fas fa-check text-success me-2"></i>이벤트 기획 제안</li>
+                            <li><i class="fas fa-check text-success me-2"></i>브랜딩 가이드</li>
+                        </ul>
+                        <a href="./pages/ai-marketing.html" class="btn btn-outline-success">AI 마케팅 체험</a>
+                    </div>
+                </div>
+                
+                <!-- Feature 3: 실시간 전략 -->
+                <div class="col-lg-4">
+                    <div class="feature-card h-100 p-4 rounded-3 shadow-sm bg-white">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-line fa-3x text-warning"></i>
+                        </div>
+                        <h4 class="fw-bold mb-3">
+                            <i class="fas fa-chart-line text-warning me-2"></i>
+                            AI 기반 실시간 전략 제안
+                        </h4>
+                        <p class="text-muted mb-4">
+                            경기도 공공데이터 분석 결과를 바탕으로 GPT-4o가 실시간으로 사업 전략을 제안하고, 
+                            개인화된 대시보드로 성과를 추적합니다.
+                        </p>
+                        <ul class="feature-list list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>실시간 전략 알림</li>
+                            <li><i class="fas fa-check text-success me-2"></i>성과 추적 대시보드</li>
+                            <li><i class="fas fa-check text-success me-2"></i>투자 ROI 예측</li>
+                            <li><i class="fas fa-check text-success me-2"></i>맞춤형 리포트</li>
+                        </ul>
+                        <a href="./pages/dashboard.html" class="btn btn-outline-warning">대시보드 체험</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Sources Section -->
+    <section id="data-sources" class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold text-dark">활용 데이터 & AI 기술</h2>
+                    <p class="lead text-muted">신뢰할 수 있는 경기도 공공데이터와 최신 생성형AI 기술</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <!-- 공공데이터 소스 -->
+                <div class="col-lg-6">
+                    <div class="data-source-card h-100 p-4 rounded-3 shadow-sm bg-white">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-database fa-2x text-primary me-3"></i>
+                            <h4 class="fw-bold mb-0">경기도 공공데이터</h4>
+                        </div>
+                        
+                        <div class="data-list">
+                            <div class="data-item mb-3 p-3 bg-light rounded">
+                                <h6 class="fw-bold text-primary mb-1">
+                                    <i class="fas fa-link me-2"></i>경기데이터드림 상권정보 API
+                                </h6>
+                                <small class="text-muted d-block mb-2">
+                                    https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=3NPA52LBMO36CQKM1XPH23894339
+                                </small>
+                                <p class="mb-0 small">경기도 지역별 상권 현황, 업종별 분포 정보</p>
+                            </div>
+                            
+                            <div class="data-item mb-3 p-3 bg-light rounded">
+                                <h6 class="fw-bold text-primary mb-1">
+                                    <i class="fas fa-link me-2"></i>소상공인시장진흥공단 상가정보 API
+                                </h6>
+                                <small class="text-muted d-block mb-2">
+                                    https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15012005
+                                </small>
+                                <p class="mb-0 small">전국 상가업소 정보, 폐업/개업 현황</p>
+                            </div>
+                            
+                            <div class="data-item mb-3 p-3 bg-light rounded">
+                                <h6 class="fw-bold text-primary mb-1">
+                                    <i class="fas fa-link me-2"></i>경기도 유동인구 데이터
+                                </h6>
+                                <small class="text-muted d-block mb-2">
+                                    https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=OA-15584
+                                </small>
+                                <p class="mb-0 small">시간대별, 요일별 유동인구 통계</p>
+                            </div>
+                            
+                            <div class="data-item p-3 bg-light rounded">
+                                <h6 class="fw-bold text-primary mb-1">
+                                    <i class="fas fa-link me-2"></i>경기도 업종별 매출 통계
+                                </h6>
+                                <small class="text-muted d-block mb-2">
+                                    https://data.gg.go.kr/portal/data/service/selectServicePage.do?infId=OA-15585
+                                </small>
+                                <p class="mb-0 small">업종별 매출 규모, 성장률 분석 데이터</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI 기술 스택 -->
+                <div class="col-lg-6">
+                    <div class="ai-tech-card h-100 p-4 rounded-3 shadow-sm bg-white">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-robot fa-2x text-success me-3"></i>
+                            <h4 class="fw-bold mb-0">생성형AI 기술</h4>
+                        </div>
+                        
+                        <div class="ai-list">
+                            <div class="ai-item mb-3 p-3 bg-light rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <img src="https://openai.com/favicon.ico" alt="OpenAI" class="me-2" style="width: 24px; height: 24px;">
+                                    <h6 class="fw-bold text-success mb-0">GPT-4o (OpenAI)</h6>
+                                </div>
+                                <p class="mb-2 small"><strong>활용 용도:</strong></p>
+                                <ul class="small mb-0">
+                                    <li>마케팅 콘텐츠 자동 생성</li>
+                                    <li>상권 데이터 분석 및 인사이트 도출</li>
+                                    <li>맞춤형 사업 전략 제안</li>
+                                    <li>고객 응대 챗봇 기능</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="ai-item mb-3 p-3 bg-light rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <img src="https://claude.ai/favicon.ico" alt="Claude" class="me-2" style="width: 24px; height: 24px;">
+                                    <h6 class="fw-bold text-success mb-0">Claude 3.5 Sonnet (Anthropic)</h6>
+                                </div>
+                                <p class="mb-2 small"><strong>활용 용도:</strong></p>
+                                <ul class="small mb-0">
+                                    <li>복합 데이터 분석 및 패턴 인식</li>
+                                    <li>전략적 사고 및 추론</li>
+                                    <li>리스크 분석 및 대안 제시</li>
+                                    <li>세밀한 시장 분석 리포트 생성</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="ai-item p-3 bg-light rounded">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-chart-bar text-warning me-2"></i>
+                                    <h6 class="fw-bold text-success mb-0">AI 통합 분석 엔진</h6>
+                                </div>
+                                <p class="mb-2 small"><strong>핵심 기능:</strong></p>
+                                <ul class="small mb-0">
+                                    <li>실시간 데이터 수집 및 전처리</li>
+                                    <li>다중 AI 모델 협업 시스템</li>
+                                    <li>개인화된 대시보드 자동 생성</li>
+                                    <li>예측 분석 및 알림 시스템</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 기술 인증 및 파트너십 -->
+            <div class="row mt-5">
+                <div class="col-lg-12">
+                    <div class="partnership-section text-center p-4 bg-white rounded-3 shadow-sm">
+                        <h5 class="fw-bold mb-3">
+                            <i class="fas fa-handshake text-primary me-2"></i>
+                            기술 파트너십 & 인증
+                        </h5>
+                        <div class="row align-items-center">
+                            <div class="col-md-3 mb-3">
+                                <div class="partner-item">
+                                    <i class="fas fa-award text-warning fa-2x mb-2"></i>
+                                    <p class="small mb-0"><strong>경기도경제과학진흥원</strong><br>창업 지원 프로그램</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="partner-item">
+                                    <i class="fab fa-openai text-success fa-2x mb-2"></i>
+                                    <p class="small mb-0"><strong>OpenAI</strong><br>GPT-4o API 파트너</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="partner-item">
+                                    <i class="fas fa-robot text-info fa-2x mb-2"></i>
+                                    <p class="small mb-0"><strong>Anthropic</strong><br>Claude API 인증</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="partner-item">
+                                    <i class="fas fa-shield-alt text-primary fa-2x mb-2"></i>
+                                    <p class="small mb-0"><strong>데이터 보안</strong><br>개인정보보호 인증</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold text-dark">실제 작동 데모</h2>
+                    <p class="lead text-muted">상권 마스터가 어떻게 작동하는지 직접 체험해보세요</p>
+                </div>
+            </div>
+            
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="demo-content">
+                        <h3 class="fw-bold mb-4">카페 사장님을 위한 맞춤 분석</h3>
+                        <div class="demo-steps">
+                            <div class="step-item d-flex mb-3">
+                                <div class="step-number bg-primary text-white rounded-circle me-3">1</div>
+                                <div>
+                                    <h5>사업장 정보 입력</h5>
+                                    <p class="text-muted mb-0">주소와 업종만 입력하면 자동으로 상권 분석 시작</p>
+                                </div>
+                            </div>
+                            <div class="step-item d-flex mb-3">
+                                <div class="step-number bg-success text-white rounded-circle me-3">2</div>
+                                <div>
+                                    <h5>AI 데이터 분석</h5>
+                                    <p class="text-muted mb-0">공공데이터와 AI가 실시간으로 상권 정보 분석</p>
+                                </div>
+                            </div>
+                            <div class="step-item d-flex mb-3">
+                                <div class="step-number bg-warning text-white rounded-circle me-3">3</div>
+                                <div>
+                                    <h5>맞춤 전략 제공</h5>
+                                    <p class="text-muted mb-0">개인화된 마케팅 전략과 콘텐츠 추천</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="demo-cta mt-4">
+                            <a href="./pages/market-analysis.html" class="btn btn-primary btn-lg me-3">
+                                <i class="fas fa-chart-line me-2"></i>
+                                상권 분석 체험
+                            </a>
+                            <a href="./pages/guide.html" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-book me-2"></i>
+                                이용 가이드
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="demo-interface bg-white rounded-3 shadow-lg p-4">
+                        <div class="demo-header d-flex align-items-center justify-content-between mb-4">
+                            <h5 class="mb-0">상권 마스터 데모</h5>
+                            <span class="badge bg-success">DEMO</span>
+                        </div>
+                        
+                        <!-- Demo Form -->
+                        <form id="demoForm">
+                            <div class="mb-3">
+                                <label for="businessType" class="form-label">업종</label>
+                                <select class="form-select" id="businessType">
+                                    <option value="cafe">카페/커피숍</option>
+                                    <option value="restaurant">음식점</option>
+                                    <option value="retail">소매업</option>
+                                    <option value="beauty">미용/네일</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="location" class="form-label">사업장 주소</label>
+                                <input type="text" class="form-control" id="location" placeholder="예: 수원시 영통구 광교중앙로">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>
+                                상권 분석 시작
+                            </button>
+                        </form>
+                        
+                        <!-- Demo Results (Hidden by default) -->
+                        <div id="demoResults" class="demo-results mt-4" style="display: none;">
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                분석이 완료되었습니다!
+                            </div>
+                            
+                            <div class="row g-2 mb-3">
+                                <div class="col-4">
+                                    <div class="card bg-info text-white">
+                                        <div class="card-body p-2 text-center">
+                                            <div class="h6 mb-0">85점</div>
+                                            <small>상권 점수</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card bg-success text-white">
+                                        <div class="card-body p-2 text-center">
+                                            <div class="h6 mb-0">1.2K</div>
+                                            <small>일일 유동인구</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card bg-warning text-white">
+                                        <div class="card-body p-2 text-center">
+                                            <div class="h6 mb-0">12</div>
+                                            <small>경쟁업체</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="ai-suggestion bg-light rounded p-3">
+                                <h6><i class="fas fa-lightbulb text-warning me-2"></i>AI 추천 전략</h6>
+                                <p class="mb-0 small">
+                                    "오후 2-4시 할인 쿠폰 이벤트로 매출 20% 향상이 기대됩니다. 
+                                    인스타그램 마케팅을 통해 20대 고객 유입을 늘려보세요."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold text-dark">고객 후기</h2>
+                    <p class="lead text-muted">베타 테스트에 참여한 소상공인들의 생생한 후기</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="testimonial-card bg-white rounded-3 shadow-sm p-4 h-100">
+                        <div class="testimonial-rating mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <blockquote class="blockquote mb-3">
+                            <p class="mb-0">"상권 마스터 덕분에 매출이 30% 늘었어요. AI가 제안한 마케팅 전략이 정말 효과적이었습니다!"</p>
+                        </blockquote>
+                        <div class="testimonial-author d-flex align-items-center">
+                            <div class="author-avatar bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                김
+                            </div>
+                            <div>
+                                <h6 class="mb-0">김수진 대표</h6>
+                                <small class="text-muted">카페 온더로드 (수원시)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="testimonial-card bg-white rounded-3 shadow-sm p-4 h-100">
+                        <div class="testimonial-rating mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                        </div>
+                        <blockquote class="blockquote mb-3">
+                            <p class="mb-0">"복잡한 데이터 분석을 쉽게 이해할 수 있어서 좋았어요. 매일 체크하면서 사업 전략을 세우고 있습니다."</p>
+                        </blockquote>
+                        <div class="testimonial-author d-flex align-items-center">
+                            <div class="author-avatar bg-success text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                박
+                            </div>
+                            <div>
+                                <h6 class="mb-0">박민호 사장</h6>
+                                <small class="text-muted">미니마트 365 (성남시)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="testimonial-card bg-white rounded-3 shadow-sm p-4 h-100">
+                        <div class="testimonial-rating mb-3">
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-warning"></i>
+                            <i class="fas fa-star text-muted"></i>
+                        </div>
+                        <blockquote class="blockquote mb-3">
+                            <p class="mb-0">"AI가 만들어주는 SNS 콘텐츠가 정말 퀄리티가 높아요. 마케팅 비용을 많이 절약할 수 있었습니다."</p>
+                        </blockquote>
+                        <div class="testimonial-author d-flex align-items-center">
+                            <div class="author-avatar bg-warning text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                이
+                            </div>
+                            <div>
+                                <h6 class="mb-0">이지은 원장</h6>
+                                <small class="text-muted">뷰티살롱 엘리트 (고양시)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center mb-5">
+                    <h2 class="display-5 fw-bold text-dark">요금제</h2>
+                    <p class="lead text-muted">당신의 사업 규모에 맞는 플랜을 선택하세요</p>
+                </div>
+            </div>
+            
+            <div class="row g-4 justify-content-center">
+                <!-- Starter Plan -->
+                <div class="col-lg-4">
+                    <div class="pricing-card bg-white rounded-3 shadow-sm p-4 h-100">
+                        <div class="pricing-header text-center mb-4">
+                            <h4 class="fw-bold">스타터</h4>
+                            <div class="pricing-price">
+                                <span class="h2 fw-bold text-primary">₩29,000</span>
+                                <span class="text-muted">/월</span>
+                            </div>
+                            <p class="text-muted">개인 사업자에게 적합</p>
+                        </div>
+                        
+                        <ul class="pricing-features list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>기본 상권 분석</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>월 20개 AI 콘텐츠 생성</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>주간 리포트</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>이메일 지원</li>
+                            <li class="mb-2"><i class="fas fa-times text-muted me-2"></i>실시간 알림</li>
+                            <li class="mb-2"><i class="fas fa-times text-muted me-2"></i>맞춤형 전략 제안</li>
+                        </ul>
+                        
+                        <button class="btn btn-outline-primary w-100">시작하기</button>
+                    </div>
+                </div>
+                
+                <!-- Professional Plan (Recommended) -->
+                <div class="col-lg-4">
+                    <div class="pricing-card bg-white rounded-3 shadow-lg p-4 h-100 border-primary position-relative">
+                        <div class="pricing-badge position-absolute top-0 start-50 translate-middle">
+                            <span class="badge bg-primary px-3 py-2">추천</span>
+                        </div>
+                        
+                        <div class="pricing-header text-center mb-4 mt-3">
+                            <h4 class="fw-bold">프로페셔널</h4>
+                            <div class="pricing-price">
+                                <span class="h2 fw-bold text-primary">₩59,000</span>
+                                <span class="text-muted">/월</span>
+                            </div>
+                            <p class="text-muted">성장하는 소상공인에게 최적</p>
+                        </div>
+                        
+                        <ul class="pricing-features list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>고급 상권 분석</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>월 100개 AI 콘텐츠 생성</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>일일 리포트</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>실시간 알림</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>맞춤형 전략 제안</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>전화 지원</li>
+                        </ul>
+                        
+                        <button class="btn btn-primary w-100">시작하기</button>
+                    </div>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="col-lg-4">
+                    <div class="pricing-card bg-white rounded-3 shadow-sm p-4 h-100">
+                        <div class="pricing-header text-center mb-4">
+                            <h4 class="fw-bold">엔터프라이즈</h4>
+                            <div class="pricing-price">
+                                <span class="h2 fw-bold text-primary">₩99,000</span>
+                                <span class="text-muted">/월</span>
+                            </div>
+                            <p class="text-muted">다점포 운영업체용</p>
+                        </div>
+                        
+                        <ul class="pricing-features list-unstyled mb-4">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>프리미엄 상권 분석</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>무제한 AI 콘텐츠</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>실시간 대시보드</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>다점포 통합 관리</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>전담 컨설턴트</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 전화 지원</li>
+                        </ul>
+                        
+                        <button class="btn btn-outline-primary w-100">문의하기</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pricing Footer -->
+            <div class="row mt-5">
+                <div class="col-lg-12 text-center">
+                    <p class="text-muted">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        14일 무료 체험 • 언제든 해지 가능 • 설치비 무료
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-content">
+                        <h2 class="display-5 fw-bold text-dark mb-4">
+                            <i class="fas fa-trophy text-warning me-2"></i>
+                            2025 경기도 창업경진대회<br>
+                            <span class="text-primary">출품작 - 상권 마스터</span>
+                        </h2>
+                        <p class="lead text-muted mb-4">
+                            경기도경제과학진흥원 지원으로 개발된 생성형AI·공공데이터 활용 
+                            소상공인 전용 마케팅 플랫폼입니다.
+                        </p>
+                        
+                        <div class="competition-info mb-4 p-3 bg-warning bg-opacity-10 rounded-3 border border-warning">
+                            <h6 class="fw-bold text-warning mb-2">
+                                <i class="fas fa-award me-2"></i>경진대회 핵심 기술
+                            </h6>
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <small class="text-dark">
+                                        <i class="fas fa-robot me-1"></i>
+                                        <strong>생성형AI:</strong> GPT-4o, Claude 3.5 Sonnet
+                                    </small>
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="text-dark">
+                                        <i class="fas fa-database me-1"></i>
+                                        <strong>공공데이터:</strong> 경기데이터드림, 상가정보 API
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="about-features">
+                            <div class="feature-item d-flex mb-3">
+                                <div class="feature-icon bg-primary text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">경기도 공공데이터 활용</h5>
+                                    <p class="text-muted mb-0">경기데이터드림, 소상공인시장진흥공단 등 신뢰할 수 있는 공식 데이터</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item d-flex mb-3">
+                                <div class="feature-icon bg-success text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">최신 생성형 AI 기술</h5>
+                                    <p class="text-muted mb-0">OpenAI GPT-4o와 Anthropic Claude 3.5 Sonnet 혁신적 협업 시스템</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item d-flex mb-3">
+                                <div class="feature-icon bg-warning text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">소상공인 특화 설계</h5>
+                                    <p class="text-muted mb-0">경기도 50개 업체 베타 테스트로 검증된 실용적 기능</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item d-flex mb-3">
+                                <div class="feature-icon bg-info text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-award"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">경진대회 혁신성 인정</h5>
+                                    <p class="text-muted mb-0">2025년 경기도 생성형AI·공공데이터 활용 창업경진대회 출품</p>
+                                </div>
+                            </div>
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">최신 생성형 AI 기술</h5>
+                                    <p class="text-muted mb-0">GPT-4와 Claude를 활용한 혁신적 솔루션</p>
+                                </div>
+                            </div>
+                            
+                            <div class="feature-item d-flex mb-3">
+                                <div class="feature-icon bg-warning text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">소상공인 특화 설계</h5>
+                                    <p class="text-muted mb-0">현장의 목소리를 반영한 실용적 기능</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="about-cta mt-4">
+                            <a href="#" class="btn btn-primary btn-lg me-3">팀 소개</a>
+                            <a href="#" class="btn btn-outline-primary btn-lg">미디어 키트</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="about-stats bg-light rounded-3 p-5">
+                        <h4 class="fw-bold text-center mb-4">프로젝트 현황</h4>
+                        
+                        <div class="row g-4">
+                            <div class="col-6">
+                                <div class="stat-item text-center">
+                                    <div class="stat-number h2 fw-bold text-primary mb-2">50+</div>
+                                    <div class="stat-label text-muted">베타 테스터</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-item text-center">
+                                    <div class="stat-number h2 fw-bold text-success mb-2">95%</div>
+                                    <div class="stat-label text-muted">사용자 만족도</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-item text-center">
+                                    <div class="stat-number h2 fw-bold text-warning mb-2">3개월</div>
+                                    <div class="stat-label text-muted">개발 기간</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-item text-center">
+                                    <div class="stat-number h2 fw-bold text-info mb-2">24/7</div>
+                                    <div class="stat-label text-muted">AI 지원</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <p class="text-muted mb-3">
+                                <i class="fas fa-award text-warning me-2"></i>
+                                2025년 경기도 생성형AI·공공데이터 활용<br>
+                                창업경진대회 출품작
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-gradient-primary">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="display-5 fw-bold text-white mb-4">
+                        지금 시작하세요
+                    </h2>
+                    <p class="lead text-white-50 mb-5">
+                        14일 무료 체험으로 상권 마스터의 모든 기능을 경험해보세요.<br>
+                        신용카드 정보 없이도 바로 시작할 수 있습니다.
+                    </p>
+                    
+                    <div class="cta-buttons">
+                        <a href="./pages/dashboard.html" class="btn btn-warning btn-lg me-3">
+                            <i class="fas fa-rocket me-2"></i>
+                            대시보드 체험
+                        </a>
+                        <a href="./pages/market-analysis.html" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-map-marked-alt me-2"></i>
+                            상권 분석 시작
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="footer-brand">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-chart-line text-primary me-2 fs-4"></i>
+                            <span class="fw-bold fs-4">상권 마스터</span>
+                        </div>
+                        <p class="text-muted mb-4">
+                            경기도 소상공인을 위한 AI 기반 상권 분석 및 마케팅 통합플랫폼. 
+                            데이터의 힘으로 당신의 사업을 성장시키세요.
+                        </p>
+                        
+                        <div class="social-links">
+                            <a href="#" class="text-muted me-3"><i class="fab fa-facebook fa-2x"></i></a>
+                            <a href="#" class="text-muted me-3"><i class="fab fa-instagram fa-2x"></i></a>
+                            <a href="#" class="text-muted me-3"><i class="fab fa-youtube fa-2x"></i></a>
+                            <a href="#" class="text-muted"><i class="fab fa-linkedin fa-2x"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2">
+                    <h5 class="fw-bold mb-3">서비스</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">상권 분석</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">AI 마케팅</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">실시간 전략</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">대시보드</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2">
+                    <h5 class="fw-bold mb-3">지원</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">도움말</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">FAQ</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">가이드</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">API 문서</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2">
+                    <h5 class="fw-bold mb-3">회사</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">회사 소개</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">팀</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">채용</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted text-decoration-none">뉴스</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-2">
+                    <h5 class="fw-bold mb-3">연락처</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-phone me-2"></i>
+                            <span class="text-muted">1588-1234</span>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-envelope me-2"></i>
+                            <span class="text-muted">hello@sangkwon-master.com</span>
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            <span class="text-muted">경기도 수원시</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <p class="text-muted mb-0">
+                        &copy; 2025 상권 마스터. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-lg-6 text-lg-end">
+                    <a href="#" class="text-muted text-decoration-none me-3">개인정보처리방침</a>
+                    <a href="#" class="text-muted text-decoration-none me-3">이용약관</a>
+                    <a href="#" class="text-muted text-decoration-none">쿠키 정책</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">로그인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">이메일</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">비밀번호</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">로그인 상태 유지</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary">로그인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalLabel">무료 체험 시작</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="signupName" class="form-label">이름</label>
+                            <input type="text" class="form-control" id="signupName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupEmail" class="form-label">이메일</label>
+                            <input type="email" class="form-control" id="signupEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="signupPhone" class="form-label">전화번호</label>
+                            <input type="tel" class="form-control" id="signupPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="businessType" class="form-label">업종</label>
+                            <select class="form-select" id="businessType" required>
+                                <option value="">선택해주세요</option>
+                                <option value="cafe">카페/커피숍</option>
+                                <option value="restaurant">음식점</option>
+                                <option value="retail">소매업</option>
+                                <option value="beauty">미용/네일</option>
+                                <option value="other">기타</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                            <label class="form-check-label" for="agreeTerms">
+                                <a href="#" class="text-decoration-none">이용약관</a> 및 
+                                <a href="#" class="text-decoration-none">개인정보처리방침</a>에 동의합니다.
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary">14일 무료 체험 시작</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Modal -->
+    <div class="modal fade" id="demoModal" tabindex="-1" aria-labelledby="demoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="demoModalLabel">상권 마스터 데모</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <h4>실제 작동 화면을 확인해보세요</h4>
+                        <p class="text-muted">실제 경기도 공공데이터를 활용한 라이브 데모입니다.</p>
+                    </div>
+                    
+                    <!-- Demo content would go here -->
+                    <div class="demo-placeholder bg-light rounded p-5 text-center">
+                        <i class="fas fa-play-circle fa-5x text-primary mb-3"></i>
+                        <h5>대화형 데모 시작</h5>
+                        <p class="text-muted">실제 상권 분석 과정을 체험해보세요</p>
+                        <button class="btn btn-primary">데모 시작</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="./js/main.js"></script>
+
+</body>
+</html>

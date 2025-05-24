@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대시보드 - 상권 마스터</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <!-- <link rel="stylesheet" href="../css/style.css"> -->
+    <style>
+        /* Chart container 고정 크기 설정 */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+        
+        .chart-container-small {
+            position: relative;
+            width: 100%;
+            height: 250px;
+        }
+        
+        /* Canvas 요소 스타일 */
+        canvas {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent;
+        }
+        
+        /* 차트 영역 높이 강제 설정 */
+        .chart-wrapper {
+            height: 300px !important;
+            position: relative;
+            background: #fff;
+        }
+        
+        .chart-wrapper-small {
+            height: 250px !important;
+            position: relative;
+            background: #fff;
+        }
+        
+        /* Canvas 크기 강제 고정 */
+        #salesChart, #demographicsChart, #popularTimesChart {
+            max-width: 100% !important;
+            max-height: 300px !important;
+            width: 100% !important;
+            height: auto !important;
+        }
+        
+        #popularTimesChart {
+            max-height: 250px !important;
+        }
+        
+        /* 차트 컨테이너 overflow 방지 */
+        .card-body {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="../index.html">
+                <i class="fas fa-chart-line text-primary me-2 fs-4"></i>
+                <span class="fw-bold text-primary">상권 마스터</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="market-analysis.html">상권 분석</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ai-marketing.html">AI 마케팅</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="dashboard.html">대시보드</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="guide.html">이용 가이드</a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-nav">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> 홍길동님
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">내 정보</a></li>
+                            <li><a class="dropdown-item" href="#">설정</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="py-4 bg-light" style="margin-top: 76px;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="h3 mb-2">
+                        <i class="fas fa-robot text-primary me-2"></i>
+                        AI 기반 실시간 대시보드
+                    </h1>
+                    <p class="text-muted mb-1">카페 온더로드의 GPT-4o & Claude 3.5 분석 인사이트</p>
+                    <div class="ai-status-badges">
+                        <span class="badge bg-success me-2">
+                            <i class="fas fa-circle me-1" style="font-size: 8px;"></i>
+                            데이터 연동 활성
+                        </span>
+                        <span class="badge bg-info me-2">
+                            <i class="fas fa-brain me-1"></i>
+                            AI 분석 실행중
+                        </span>
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-clock me-1"></i>
+                            실시간 업데이트
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-end">
+                    <div class="d-flex gap-2 justify-content-end">
+                        <select class="form-select form-select-sm" style="width: auto;">
+                            <option>최근 7일</option>
+                            <option>최근 30일</option>
+                            <option>최근 3개월</option>
+                        </select>
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fas fa-sync-alt me-1"></i>새로고침
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="py-4">
+        <div class="container">
+            <!-- KPI Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary text-white rounded-3 p-3">
+                                        <i class="fas fa-users fa-lg"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="text-muted small">일일 방문객</div>
+                                    <div class="h4 mb-0">1,247</div>
+                                    <div class="text-success small">
+                                        <i class="fas fa-arrow-up me-1"></i>+12.5%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success text-white rounded-3 p-3">
+                                        <i class="fas fa-won-sign fa-lg"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="text-muted small">일일 매출</div>
+                                    <div class="h4 mb-0">₩3.2M</div>
+                                    <div class="text-success small">
+                                        <i class="fas fa-arrow-up me-1"></i>+8.3%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning text-white rounded-3 p-3">
+                                        <i class="fas fa-chart-line fa-lg"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="text-muted small">전환율</div>
+                                    <div class="h4 mb-0">23.8%</div>
+                                    <div class="text-danger small">
+                                        <i class="fas fa-arrow-down me-1"></i>-2.1%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info text-white rounded-3 p-3">
+                                        <i class="fas fa-star fa-lg"></i>
+                                    </div>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="text-muted small">고객 만족도</div>
+                                    <div class="h4 mb-0">4.6/5</div>
+                                    <div class="text-success small">
+                                        <i class="fas fa-arrow-up me-1"></i>+0.2
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row g-4 mb-4">
+                <!-- Sales Chart -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">매출 추이</h5>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-primary active">일별</button>
+                                    <button class="btn btn-outline-primary">주별</button>
+                                    <button class="btn btn-outline-primary">월별</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="chart-wrapper">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Demographics -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom-0">
+                            <h5 class="card-title mb-0">고객층 분석</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-wrapper">
+                                <canvas id="demographicsChart"></canvas>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="small">20대</span>
+                                    <span class="small fw-bold">35%</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-primary" style="width: 35%"></div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="small">30대</span>
+                                    <span class="small fw-bold">28%</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-success" style="width: 28%"></div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="small">40대</span>
+                                    <span class="small fw-bold">22%</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 6px;">
+                                    <div class="progress-bar bg-warning" style="width: 22%"></div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="small">기타</span>
+                                    <span class="small fw-bold">15%</span>
+                                </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar bg-info" style="width: 15%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Analytics -->
+            <div class="row g-4 mb-4">
+                <!-- Popular Times -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom-0">
+                            <h5 class="card-title mb-0">시간대별 방문 현황</h5>
+                        </div>
+                        <div class="card-body p-3">
+                            <div class="chart-wrapper-small">
+                                <canvas id="popularTimesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Products -->
+                <div class="col-lg-6">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-white border-bottom-0">
+                            <h5 class="card-title mb-0">인기 메뉴 TOP 5</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px;">
+                                            <span class="small fw-bold">1</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">아메리카노</div>
+                                            <div class="text-muted small">₩4,500</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">342</div>
+                                            <div class="text-muted small">주문</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px;">
+                                            <span class="small fw-bold">2</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">카페라떼</div>
+                                            <div class="text-muted small">₩5,000</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">287</div>
+                                            <div class="text-muted small">주문</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px;">
+                                            <span class="small fw-bold">3</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">카푸치노</div>
+                                            <div class="text-muted small">₩5,500</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">198</div>
+                                            <div class="text-muted small">주문</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px;">
+                                            <span class="small fw-bold">4</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">크로와상</div>
+                                            <div class="text-muted small">₩3,800</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">156</div>
+                                            <div class="text-muted small">주문</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px;">
+                                            <span class="small fw-bold">5</span>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold">치즈케이크</div>
+                                            <div class="text-muted small">€6,500</div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="fw-bold">123</div>
+                                            <div class="text-muted small">주문</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Insights & Recommendations -->
+            <div class="row g-4">
+                <!-- AI Insights -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-bottom-0">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-brain text-primary me-2"></i>AI 인사이트
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-lg-6">
+                                    <div class="alert alert-success border-0">
+                                        <div class="d-flex">
+                                            <i class="fas fa-lightbulb fa-lg me-3 mt-1"></i>
+                                            <div>
+                                                <h6 class="alert-heading">매출 증가 기회</h6>
+                                                <p class="mb-0">오후 2-4시 사이 고객 방문이 감소합니다. 할인 이벤트나 특별 메뉴로 이 시간대 매출을 늘려보세요.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="alert alert-info border-0">
+                                        <div class="d-flex">
+                                            <i class="fas fa-users fa-lg me-3 mt-1"></i>
+                                            <div>
+                                                <h6 class="alert-heading">고객층 변화</h6>
+                                                <p class="mb-0">20대 고객이 전월 대비 15% 증가했습니다. 젊은 층을 대상으로 한 SNS 마케팅을 강화하세요.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="alert alert-warning border-0">
+                                        <div class="d-flex">
+                                            <i class="fas fa-chart-line fa-lg me-3 mt-1"></i>
+                                            <div>
+                                                <h6 class="alert-heading">계절성 트렌드</h6>
+                                                <p class="mb-0">가을 시즌 음료 주문이 증가하고 있습니다. 시즌 메뉴를 더 적극적으로 홍보해보세요.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="alert alert-primary border-0">
+                                        <div class="d-flex">
+                                            <i class="fas fa-star fa-lg me-3 mt-1"></i>
+                                            <div>
+                                                <h6 class="alert-heading">서비스 품질</h6>
+                                                <p class="mb-0">고객 만족도가 상승세입니다. 현재의 서비스 품질을 유지하면서 더 많은 리뷰를 유도해보세요.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-white border-bottom-0">
+                            <h5 class="card-title mb-0">빠른 작업</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-magic me-2"></i>AI 콘텐츠 생성
+                                </button>
+                                <button class="btn btn-success">
+                                    <i class="fas fa-chart-bar me-2"></i>상권 분석 실행
+                                </button>
+                                <button class="btn btn-warning">
+                                    <i class="fas fa-calendar-plus me-2"></i>이벤트 기획
+                                </button>
+                                <button class="btn btn-info">
+                                    <i class="fas fa-download me-2"></i>월간 리포트 다운로드
+                                </button>
+                            </div>
+
+                            <hr>
+
+                            <h6 class="mb-3">최근 활동</h6>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item border-0 px-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-instagram text-primary me-2"></i>
+                                        <div class="flex-grow-1">
+                                            <div class="small fw-semibold">Instagram 포스트 생성</div>
+                                            <div class="text-muted small">2시간 전</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item border-0 px-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-chart-line text-success me-2"></i>
+                                        <div class="flex-grow-1">
+                                            <div class="small fw-semibold">상권 분석 완료</div>
+                                            <div class="text-muted small">5시간 전</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="list-group-item border-0 px-0">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-star text-warning me-2"></i>
+                                        <div class="flex-grow-1">
+                                            <div class="small fw-semibold">새 리뷰 5개</div>
+                                            <div class="text-muted small">1일 전</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script src="../js/main.js"></script> -->
+    <script>
+        // Dashboard specific JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // ResizeObserver 에러 방지
+            window.addEventListener('error', function(e) {
+                if (e.message === 'ResizeObserver loop limit exceeded') {
+                    e.stopImmediatePropagation();
+                    e.preventDefault();
+                }
+            });
+            
+            // 차트 초기화 (간단한 방법)
+            setTimeout(function() {
+                
+                // Sales Chart
+                const salesCtx = document.getElementById('salesChart');
+                if (salesCtx) {
+                    new Chart(salesCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['월', '화', '수', '목', '금', '토', '일'],
+                            datasets: [{
+                                label: '매출 (만원)',
+                                data: [280, 320, 310, 380, 350, 450, 420],
+                                borderColor: '#007bff',
+                                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4
+                            }, {
+                                label: '목표 (만원)',
+                                data: [300, 300, 300, 300, 300, 300, 300],
+                                borderColor: '#28a745',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                intersect: false,
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                }
+                            },
+                            animation: {
+                                duration: 0 // 애니메이션 비활성화로 크기 변경 방지
+                            }
+                        }
+                    });
+                    console.log('Sales chart created');
+                }
+
+                // Demographics Chart
+                const demographicsCtx = document.getElementById('demographicsChart');
+                if (demographicsCtx) {
+                    new Chart(demographicsCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['20대', '30대', '40대', '기타'],
+                            datasets: [{
+                                data: [35, 28, 22, 15],
+                                backgroundColor: [
+                                    '#007bff',
+                                    '#28a745',
+                                    '#ffc107',
+                                    '#17a2b8'
+                                ],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            animation: {
+                                duration: 0 // 애니메이션 비활성화
+                            }
+                        }
+                    });
+                    console.log('Demographics chart created');
+                }
+
+                // Popular Times Chart
+                const popularTimesCtx = document.getElementById('popularTimesChart');
+                if (popularTimesCtx) {
+                    new Chart(popularTimesCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['06', '08', '10', '12', '14', '16', '18', '20', '22'],
+                            datasets: [{
+                                label: '방문객 수',
+                                data: [45, 120, 180, 250, 95, 140, 220, 180, 85],
+                                backgroundColor: '#007bff',
+                                borderRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            animation: {
+                                duration: 0 // 애니메이션 비활성화
+                            }
+                        }
+                    });
+                    console.log('Popular times chart created');
+                }
+                
+                console.log('All charts initialized successfully');
+                
+            }, 500);
+        });
+
+        function updateKPIs() {
+            // Simulate real-time data updates
+            const visitors = document.querySelector('.card-body .h4');
+            if (visitors) {
+                const currentValue = parseInt(visitors.textContent.replace(',', ''));
+                const newValue = currentValue + Math.floor(Math.random() * 10 - 5);
+                visitors.textContent = newValue.toLocaleString();
+            }
+        }
+
+        // Chart period selector
+        document.querySelectorAll('.btn-group .btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                this.parentNode.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Update chart data based on selection
+                updateChartPeriod(this.textContent);
+            });
+        });
+
+        function updateChartPeriod(period) {
+            console.log('Chart period changed to:', period);
+            // Here you would typically fetch new data and update the chart
+        }
+    </script>
+</body>
+</html>
