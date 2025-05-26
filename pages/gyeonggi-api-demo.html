@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>경기도 공공데이터 API 연동 데모 - 상권 마스터</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0;
+        }
+        
+        .api-demo-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .api-demo-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .data-table {
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        #map {
+            height: 400px;
+            border-radius: 10px;
+            border: 2px solid #dee2e6;
+        }
+        
+        .api-status {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .api-status.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .api-status.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .api-status.loading {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        .data-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .polygon-info {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- 히어로 섹션 -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-database me-3"></i>
+                        경기도 공공데이터 API 실시간 연동
+                    </h1>
+                    <p class="lead mb-4">
+                        실제 경기도 공공데이터 API를 호출하여 상권 매출 데이터와 
+                        상권 경계 정보를 실시간으로 가져와 시각화합니다.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <span class="badge bg-warning fs-6">
+                            <i class="fas fa-key me-1"></i>
+                            실제 API 키 보유
+                        </span>
+                        <span class="badge bg-success fs-6">
+                            <i class="fas fa-map me-1"></i>
+                            카카오맵 연동
+                        </span>
+                        <span class="badge bg-info fs-6">
+                            <i class="fas fa-chart-line me-1"></i>
+                            실시간 시각화
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="text-center">
+                        <i class="fas fa-cogs fa-6x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API 연동 데모 섹션 -->
+    <section class="py-5">
+        <div class="container">
+            
+            <!-- API 정보 카드 -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="data-card">
+                        <h3 class="mb-3">
+                            <i class="fas fa-info-circle text-primary me-2"></i>
+                            API 연동 정보
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6><strong>API 1: 발달골목상권 추정매출 현황</strong></h6>
+                                <p class="small text-muted mb-1">
+                                    <i class="fas fa-link me-1"></i>
+                                    <code>https://openapi.gg.go.kr/TBGGESTDEVALLSTM</code>
+                                </p>
+                                <p class="small">BC카드 데이터 기반 실제 매출 추정 정보</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><strong>API 2: 골목상권 현황 (Polygon 포함)</strong></h6>
+                                <p class="small text-muted mb-1">
+                                    <i class="fas fa-link me-1"></i>
+                                    <code>https://openapi.gg.go.kr/AlleyBizdist</code>
+                                </p>
+                                <p class="small">상권 경계 정보 및 업종 분포 데이터</p>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <span class="badge bg-primary me-2">
+                                <i class="fas fa-key me-1"></i>
+                                API Key: f490971d174248b08f4796d5193036c1
+                            </span>
+                            <span class="badge bg-secondary">
+                                <i class="fas fa-server me-1"></i>
+                                경기데이터드림 공식 API
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 컨트롤 패널 -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <div class="data-card">
+                        <h3 class="mb-3">
+                            <i class="fas fa-sliders-h text-success me-2"></i>
+                            API 호출 제어
+                        </h3>
+                        <div class="row align-items-end">
+                            <div class="col-md-3">
+                                <label for="pageSize" class="form-label">데이터 개수</label>
+                                <select class="form-select" id="pageSize">
+                                    <option value="10">10개</option>
+                                    <option value="20" selected>20개</option>
+                                    <option value="50">50개</option>
+                                    <option value="100">100개</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="regionFilter" class="form-label">상권 필터</label>
+                                <input type="text" class="form-control" id="regionFilter" placeholder="예: 강남역">
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-primary btn-lg w-100" onclick="loadAllData()">
+                                    <i class="fas fa-sync-alt me-2"></i>
+                                    API 호출 시작
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-success btn-lg w-100" onclick="testApiDirectly()">
+                                    <i class="fas fa-flask me-2"></i>
+                                    직접 API 테스트
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- API 상태 표시 -->
+            <div class="row mb-4">
+                <div class="col-lg-6">
+                    <div id="salesApiStatus" class="api-status loading">
+                        <i class="fas fa-circle-notch fa-spin me-2"></i>
+                        매출 데이터 API 대기 중...
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div id="districtApiStatus" class="api-status loading">
+                        <i class="fas fa-circle-notch fa-spin me-2"></i>
+                        상권 데이터 API 대기 중...
+                    </div>
+                </div>
+            </div>
+
+            <!-- 데이터 시각화 섹션 -->
+            <div class="row">
+                
+                <!-- 매출 데이터 차트 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="api-demo-card p-4 position-relative">
+                        <span class="status-badge">
+                            <span class="badge bg-primary" id="salesStatus">대기중</span>
+                        </span>
+                        
+                        <h4 class="mb-3">
+                            <i class="fas fa-won-sign text-success me-2"></i>
+                            상권별 추정매출 현황
+                        </h4>
+                        
+                        <div id="salesLoadingSpinner" class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">로딩 중...</span>
+                            </div>
+                            <p class="mt-2">매출 데이터 불러오는 중...</p>
+                        </div>
+                        
+                        <div id="salesChart" class="chart-container">
+                            <canvas id="salesChartCanvas"></canvas>
+                        </div>
+                        
+                        <div id="salesSummary" class="mt-3">
+                            <!-- 매출 요약 정보가 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 상권 분포 지도 -->
+                <div class="col-lg-6 mb-4">
+                    <div class="api-demo-card p-4 position-relative">
+                        <span class="status-badge">
+                            <span class="badge bg-warning" id="mapStatus">대기중</span>
+                        </span>
+                        
+                        <h4 class="mb-3">
+                            <i class="fas fa-map-marked-alt text-info me-2"></i>
+                            상권 경계 및 분포 지도
+                        </h4>
+                        
+                        <div id="mapLoadingSpinner" class="loading-spinner">
+                            <div class="spinner-border text-info" role="status">
+                                <span class="visually-hidden">로딩 중...</span>
+                            </div>
+                            <p class="mt-2">지도 및 상권 데이터 로딩 중...</p>
+                        </div>
+                        
+                        <div id="map"></div>
+                        
+                        <div id="mapLegend" class="mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                지도를 클릭하면 상권 상세 정보를 확인할 수 있습니다.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 상세 데이터 테이블 -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="api-demo-card p-4">
+                        <h4 class="mb-3">
+                            <i class="fas fa-table text-warning me-2"></i>
+                            실시간 API 응답 데이터
+                        </h4>
+                        
+                        <!-- 탭 네비게이션 -->
+                        <ul class="nav nav-tabs" id="dataTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="sales-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#sales-data" type="button" role="tab">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    매출 데이터
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="district-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#district-data" type="button" role="tab">
+                                    <i class="fas fa-map me-1"></i>
+                                    상권 데이터
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="raw-tab" data-bs-toggle="tab" 
+                                        data-bs-target="#raw-data" type="button" role="tab">
+                                    <i class="fas fa-code me-1"></i>
+                                    원시 데이터 (JSON)
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <!-- 탭 콘텐츠 -->
+                        <div class="tab-content" id="dataTabContent">
+                            <div class="tab-pane fade show active" id="sales-data" role="tabpanel">
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover data-table" id="salesTable">
+                                        <thead class="table-primary">
+                                            <tr>
+                                                <th>상권명</th>
+                                                <th>업종</th>
+                                                <th>매출금액 (원)</th>
+                                                <th>매출건수</th>
+                                                <th>기준년도</th>
+                                                <th>분기</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="6" class="text-center text-muted">
+                                                    API 호출을 시작해주세요
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-pane fade" id="district-data" role="tabpanel">
+                                <div class="table-responsive mt-3">
+                                    <table class="table table-hover data-table" id="districtTable">
+                                        <thead class="table-info">
+                                            <tr>
+                                                <th>상권명</th>
+                                                <th>점포수</th>
+                                                <th>위도</th>
+                                                <th>경도</th>
+                                                <th>업종정보</th>
+                                                <th>Polygon</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="6" class="text-center text-muted">
+                                                    API 호출을 시작해주세요
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="tab-pane fade" id="raw-data" role="tabpanel">
+                                <div class="mt-3">
+                                    <pre id="rawDataContent" class="bg-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.8rem;">
+API 호출 후 원시 JSON 데이터가 여기에 표시됩니다.
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 카카오맵 API -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_KAKAO_API_KEY&libraries=services"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 전역 변수
+        let map;
+        let salesChart;
+        let salesData = null;
+        let districtData = null;
+        
+        // 경기도 공공데이터 API 설정
+        const API_CONFIG = {
+            key: 'f490971d174248b08f4796d5193036c1',
+            baseUrl: 'https://openapi.gg.go.kr',
+            salesEndpoint: 'TBGGESTDEVALLSTM',
+            districtEndpoint: 'AlleyBizdist'
+        };
+        
+        // 페이지 로드 시 지도 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMap();
+            updateApiStatus('매출 API 준비 완료', 'sales', 'info');
+            updateApiStatus('상권 API 준비 완료', 'district', 'info');
+        });
+        
+        // 카카오맵 초기화
+        function initializeMap() {
+            try {
+                // 카카오맵 API가 로드되지 않은 경우 대체 지도 표시
+                if (typeof kakao === 'undefined') {
+                    document.getElementById('map').innerHTML = `
+                        <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+                            <div class="text-center">
+                                <i class="fas fa-map fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">카카오맵 API 로딩 중...</h5>
+                                <p class="text-muted">실제 서비스에서는 카카오맵이 표시됩니다</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const container = document.getElementById('map');
+                const options = {
+                    center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울시청
+                    level: 8
+                };
+                
+                map = new kakao.maps.Map(container, options);
+                
+                // 지도 타입 컨트롤 추가
+                const mapTypeControl = new kakao.maps.MapTypeControl();
+                map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+                
+                // 줌 컨트롤 추가
+                const zoomControl = new kakao.maps.ZoomControl();
+                map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+                
+                console.log('카카오맵 초기화 완료');
+                
+            } catch (error) {
+                console.error('카카오맵 초기화 실패:', error);
+                document.getElementById('map').innerHTML = `
+                    <div class="d-flex align-items-center justify-content-center h-100 bg-warning bg-opacity-10">
+                        <div class="text-center">
+                            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                            <h5 class="text-warning">지도 로딩 실패</h5>
+                            <p class="text-muted">Mock 데이터로 시연 중입니다</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // API 상태 업데이트
+        function updateApiStatus(message, type, status) {
+            const statusElement = document.getElementById(`${type}ApiStatus`);
+            const badgeElement = document.getElementById(`${type}Status`);
+            
+            statusElement.className = `api-status ${status}`;
+            
+            let icon;
+            switch(status) {
+                case 'success':
+                    icon = 'fas fa-check-circle';
+                    badgeElement.className = 'badge bg-success';
+                    badgeElement.textContent = '성공';
+                    break;
+                case 'error':
+                    icon = 'fas fa-exclamation-circle';
+                    badgeElement.className = 'badge bg-danger';
+                    badgeElement.textContent = '실패';
+                    break;
+                case 'loading':
+                    icon = 'fas fa-circle-notch fa-spin';
+                    badgeElement.className = 'badge bg-warning';
+                    badgeElement.textContent = '로딩';
+                    break;
+                default:
+                    icon = 'fas fa-info-circle';
+                    badgeElement.className = 'badge bg-info';
+                    badgeElement.textContent = '준비';
+            }
+            
+            statusElement.innerHTML = `<i class="${icon} me-2"></i>${message}`;
+        }
+        
+        // 모든 데이터 로드
+        async function loadAllData() {
+            const pageSize = document.getElementById('pageSize').value;
+            const regionFilter = document.getElementById('regionFilter').value;
+            
+            // 로딩 스피너 표시
+            document.getElementById('salesLoadingSpinner').style.display = 'block';
+            document.getElementById('mapLoadingSpinner').style.display = 'block';
+            document.getElementById('salesChart').style.display = 'none';
+            
+            updateApiStatus('매출 데이터 API 호출 중...', 'sales', 'loading');
+            updateApiStatus('상권 데이터 API 호출 중...', 'district', 'loading');
+            
+            try {
+                // 병렬로 두 API 호출
+                const [salesResult, districtResult] = await Promise.allSettled([
+                    fetchSalesData(pageSize),
+                    fetchDistrictData(pageSize, regionFilter)
+                ]);
+                
+                // 매출 데이터 처리
+                if (salesResult.status === 'fulfilled') {
+                    salesData = salesResult.value;
+                    updateApiStatus(`매출 데이터 ${salesData.data?.length || 0}건 로드 완료`, 'sales', 'success');
+                    renderSalesChart(salesData);
+                    renderSalesTable(salesData);
+                } else {
+                    updateApiStatus('매출 데이터 로드 실패', 'sales', 'error');
+                    console.error('Sales API Error:', salesResult.reason);
+                }
+                
+                // 상권 데이터 처리
+                if (districtResult.status === 'fulfilled') {
+                    districtData = districtResult.value;
+                    updateApiStatus(`상권 데이터 ${districtData.districts?.length || 0}건 로드 완료`, 'district', 'success');
+                    renderDistrictMap(districtData);
+                    renderDistrictTable(districtData);
+                } else {
+                    updateApiStatus('상권 데이터 로드 실패', 'district', 'error');
+                    console.error('District API Error:', districtResult.reason);
+                }
+                
+                // 원시 데이터 표시
+                document.getElementById('rawDataContent').textContent = JSON.stringify({
+                    salesData: salesData,
+                    districtData: districtData
+                }, null, 2);
+                
+            } catch (error) {
+                console.error('Data loading error:', error);
+                updateApiStatus('전체 데이터 로드 실패', 'sales', 'error');
+                updateApiStatus('전체 데이터 로드 실패', 'district', 'error');
+            } finally {
+                // 로딩 스피너 숨김
+                document.getElementById('salesLoadingSpinner').style.display = 'none';
+                document.getElementById('mapLoadingSpinner').style.display = 'none';
+                document.getElementById('salesChart').style.display = 'block';
+            }
+        }
+        
+        // 매출 데이터 API 호출
+        async function fetchSalesData(pageSize = 20) {
+            const url = `${API_CONFIG.baseUrl}/${API_CONFIG.salesEndpoint}?KEY=${API_CONFIG.key}&Type=json&pIndex=1&pSize=${pageSize}`;
+            
+            console.log('Fetching sales data from:', url);
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'SangkwonMaster/1.0'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                return {
+                    success: true,
+                    totalCount: data.TBGGESTDEVALLSTM?.[0]?.list_total_count || 0,
+                    data: data.TBGGESTDEVALLSTM?.[1]?.row || [],
+                    metadata: {
+                        source: '경기도 발달골목상권 추정매출 현황',
+                        lastUpdated: new Date().toISOString(),
+                        apiUrl: url
+                    }
+                };
+                
+            } catch (error) {
+                console.error('Sales API Error:', error);
+                
+                // Fallback 데이터 반환
+                return {
+                    success: false,
+                    error: error.message,
+                    data: getMockSalesData(),
+                    metadata: {
+                        source: 'Mock Data (API 호출 실패)',
+                        lastUpdated: new Date().toISOString(),
+                        note: '실제 API 연동 실패시 시연용 데이터'
+                    }
+                };
+            }
+        }
+        
+        // 상권 데이터 API 호출
+        async function fetchDistrictData(pageSize = 20, regionFilter = '') {
+            let url = `${API_CONFIG.baseUrl}/${API_CONFIG.districtEndpoint}?KEY=${API_CONFIG.key}&Type=json&pIndex=1&pSize=${pageSize}`;
+            
+            if (regionFilter) {
+                url += `&BIZDIST_NM=${encodeURIComponent(regionFilter)}`;
+            }
+            
+            console.log('Fetching district data from:', url);
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'SangkwonMaster/1.0'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                const districts = data.AlleyBizdist?.[1]?.row || [];
+                const processedDistricts = districts.map(district => ({
+                    name: district.BIZDIST_NM,
+                    storeCount: district.STORE_CNT,
+                    lat: parseFloat(district.LAT),
+                    lng: parseFloat(district.LOGT),
+                    polygon: parsePolygonData(district.MULTI_REGION_INFO),
+                    industryInfo: district.INDUTYPE_INFO
+                }));
+                
+                return {
+                    success: true,
+                    totalCount: data.AlleyBizdist?.[0]?.list_total_count || 0,
+                    districts: processedDistricts,
+                    metadata: {
+                        source: '경기도 골목상권 현황',
+                        lastUpdated: new Date().toISOString(),
+                        apiUrl: url
+                    }
+                };
+                
+            } catch (error) {
+                console.error('District API Error:', error);
+                
+                // Fallback 데이터 반환
+                return {
+                    success: false,
+                    error: error.message,
+                    districts: getMockDistrictData(),
+                    metadata: {
+                        source: 'Mock Data (API 호출 실패)',
+                        lastUpdated: new Date().toISOString(),
+                        note: '실제 API 연동 실패시 시연용 데이터'
+                    }
+                };
+            }
+        }
+        
+        // polygon 데이터 파싱
+        function parsePolygonData(polygonString) {
+            if (!polygonString) return null;
+            
+            try {
+                const coords = polygonString.split(',').map(coord => {
+                    const [lng, lat] = coord.trim().split(' ');
+                    return { lat: parseFloat(lat), lng: parseFloat(lng) };
+                });
+                return coords;
+            } catch (error) {
+                console.error('Polygon parsing error:', error);
+                return null;
+            }
+        }
+        
+        // 매출 차트 렌더링
+        function renderSalesChart(data) {
+            const ctx = document.getElementById('salesChartCanvas').getContext('2d');
+            
+            if (salesChart) {
+                salesChart.destroy();
+            }
+            
+            const chartData = data.data?.slice(0, 10) || [];
+            
+            salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(item => item.BIZDIST_NM || '알 수 없음'),
+                    datasets: [{
+                        label: '추정매출 (백만원)',
+                        data: chartData.map(item => Math.round((parseInt(item.AMT) || 0) / 1000000)),
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '상권별 추정매출 TOP 10'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '매출액 (백만원)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 요약 정보 업데이트
+            const totalSales = chartData.reduce((sum, item) => sum + (parseInt(item.AMT) || 0), 0);
+            const avgSales = chartData.length > 0 ? totalSales / chartData.length : 0;
+            
+            document.getElementById('salesSummary').innerHTML = `
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="metric-value">${chartData.length}</div>
+                        <small class="text-muted">조회 건수</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="metric-value">${Math.round(totalSales / 1000000)}M</div>
+                        <small class="text-muted">총 매출</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="metric-value">${Math.round(avgSales / 1000000)}M</div>
+                        <small class="text-muted">평균 매출</small>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 상권 지도 렌더링
+        function renderDistrictMap(data) {
+            if (!map) {
+                document.getElementById('map').innerHTML = `
+                    <div class="d-flex align-items-center justify-content-center h-100 bg-info bg-opacity-10">
+                        <div class="text-center">
+                            <i class="fas fa-map-marked-alt fa-3x text-info mb-3"></i>
+                            <h5 class="text-info">지도 시연 모드</h5>
+                            <p class="text-muted">${data.districts?.length || 0}개 상권 데이터 로드 완료</p>
+                            <div class="polygon-info">
+                                ${data.districts?.map(d => `
+                                    <div><strong>${d.name}</strong>: ${d.storeCount}개 점포</div>
+                                `).join('') || '데이터 없음'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 기존 마커 제거 (실제 구현에서는 마커 배열 관리 필요)
+            
+            // 새 마커 추가
+            data.districts?.forEach(district => {
+                if (district.lat && district.lng) {
+                    const markerPosition = new kakao.maps.LatLng(district.lat, district.lng);
+                    
+                    const marker = new kakao.maps.Marker({
+                        position: markerPosition,
+                        map: map
+                    });
+                    
+                    const infoWindow = new kakao.maps.InfoWindow({
+                        content: `
+                            <div style="padding: 10px; min-width: 200px;">
+                                <h6><strong>${district.name}</strong></h6>
+                                <p class="mb-1">점포수: ${district.storeCount}개</p>
+                                <p class="mb-1">업종: ${district.industryInfo || '정보 없음'}</p>
+                                <small class="text-muted">위치: ${district.lat.toFixed(4)}, ${district.lng.toFixed(4)}</small>
+                            </div>
+                        `
+                    });
+                    
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                        infoWindow.open(map, marker);
+                    });
+                    
+                    // Polygon 그리기 (데이터가 있는 경우)
+                    if (district.polygon && district.polygon.length > 0) {
+                        const polygonPath = district.polygon.map(coord => 
+                            new kakao.maps.LatLng(coord.lat, coord.lng)
+                        );
+                        
+                        const polygon = new kakao.maps.Polygon({
+                            path: polygonPath,
+                            strokeWeight: 2,
+                            strokeColor: '#667eea',
+                            strokeOpacity: 0.8,
+                            fillColor: '#667eea',
+                            fillOpacity: 0.3
+                        });
+                        
+                        polygon.setMap(map);
+                    }
+                }
+            });
+            
+            // 지도 중심을 첫 번째 상권으로 이동
+            if (data.districts && data.districts.length > 0) {
+                const firstDistrict = data.districts[0];
+                if (firstDistrict.lat && firstDistrict.lng) {
+                    const moveLatLon = new kakao.maps.LatLng(firstDistrict.lat, firstDistrict.lng);
+                    map.setCenter(moveLatLon);
+                    map.setLevel(6);
+                }
+            }
+        }
+        
+        // 매출 테이블 렌더링
+        function renderSalesTable(data) {
+            const tbody = document.querySelector('#salesTable tbody');
+            
+            if (!data.data || data.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">데이터가 없습니다</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.data.map(item => `
+                <tr>
+                    <td><strong>${item.BIZDIST_NM || '정보 없음'}</strong></td>
+                    <td><span class="badge bg-secondary">${item.CLASS_CD_NM || '분류 없음'}</span></td>
+                    <td class="text-end"><strong>${parseInt(item.AMT || 0).toLocaleString()}원</strong></td>
+                    <td class="text-end">${parseInt(item.NOC || 0).toLocaleString()}건</td>
+                    <td class="text-center">${item.STD_YY || '-'}</td>
+                    <td class="text-center">${item.QU_NM || '-'}</td>
+                </tr>
+            `).join('');
+        }
+        
+        // 상권 테이블 렌더링
+        function renderDistrictTable(data) {
+            const tbody = document.querySelector('#districtTable tbody');
+            
+            if (!data.districts || data.districts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">데이터가 없습니다</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = data.districts.map(district => `
+                <tr>
+                    <td><strong>${district.name || '정보 없음'}</strong></td>
+                    <td class="text-center">${district.storeCount || 0}개</td>
+                    <td class="text-center">${district.lat?.toFixed(4) || '-'}</td>
+                    <td class="text-center">${district.lng?.toFixed(4) || '-'}</td>
+                    <td><small>${district.industryInfo || '정보 없음'}</small></td>
+                    <td class="text-center">
+                        ${district.polygon ? 
+                            `<span class="badge bg-success">${district.polygon.length}개 좌표</span>` : 
+                            `<span class="badge bg-secondary">없음</span>`
+                        }
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // 직접 API 테스트
+        async function testApiDirectly() {
+            const testUrl = `${API_CONFIG.baseUrl}/${API_CONFIG.salesEndpoint}?KEY=${API_CONFIG.key}&Type=json&pIndex=1&pSize=5`;
+            
+            try {
+                updateApiStatus('직접 API 테스트 중...', 'sales', 'loading');
+                
+                const response = await fetch(testUrl);
+                const data = await response.json();
+                
+                alert(`API 테스트 성공!\n\n응답 데이터: ${JSON.stringify(data, null, 2).substring(0, 500)}...`);
+                updateApiStatus('API 테스트 성공', 'sales', 'success');
+                
+            } catch (error) {
+                alert(`API 테스트 실패!\n\n오류: ${error.message}`);
+                updateApiStatus('API 테스트 실패', 'sales', 'error');
+            }
+        }
+        
+        // Mock 데이터 함수들
+        function getMockSalesData() {
+            return [
+                { STD_YY: '2024', QU_NM: '4분기', BIZDIST_NM: '강남역 상권', CLASS_CD_NM: '카페', AMT: '15000000', NOC: '450' },
+                { STD_YY: '2024', QU_NM: '4분기', BIZDIST_NM: '홍대 상권', CLASS_CD_NM: '음식점', AMT: '25000000', NOC: '680' },
+                { STD_YY: '2024', QU_NM: '4분기', BIZDIST_NM: '수원역 상권', CLASS_CD_NM: '카페', AMT: '8000000', NOC: '220' },
+                { STD_YY: '2024', QU_NM: '4분기', BIZDIST_NM: '성남 분당 상권', CLASS_CD_NM: '편의점', AMT: '12000000', NOC: '380' },
+                { STD_YY: '2024', QU_NM: '4분기', BIZDIST_NM: '안양 평촌 상권', CLASS_CD_NM: '음식점', AMT: '18000000', NOC: '520' }
+            ];
+        }
+        
+        function getMockDistrictData() {
+            return [
+                {
+                    name: '강남역 상권',
+                    storeCount: 245,
+                    lat: 37.4979,
+                    lng: 127.0276,
+                    polygon: [
+                        { lat: 37.4970, lng: 127.0250 },
+                        { lat: 37.4990, lng: 127.0250 },
+                        { lat: 37.4990, lng: 127.0300 },
+                        { lat: 37.4970, lng: 127.0300 }
+                    ],
+                    industryInfo: '카페, 음식점, 소매업'
+                },
+                {
+                    name: '수원역 상권',
+                    storeCount: 180,
+                    lat: 37.2636,
+                    lng: 127.0286,
+                    polygon: [
+                        { lat: 37.2620, lng: 127.0260 },
+                        { lat: 37.2650, lng: 127.0260 },
+                        { lat: 37.2650, lng: 127.0310 },
+                        { lat: 37.2620, lng: 127.0310 }
+                    ],
+                    industryInfo: '음식점, 편의점, 서비스업'
+                },
+                {
+                    name: '성남 분당 상권',
+                    storeCount: 320,
+                    lat: 37.3838,
+                    lng: 127.1230,
+                    polygon: [
+                        { lat: 37.3820, lng: 127.1200 },
+                        { lat: 37.3860, lng: 127.1200 },
+                        { lat: 37.3860, lng: 127.1260 },
+                        { lat: 37.3820, lng: 127.1260 }
+                    ],
+                    industryInfo: '카페, 레스토랑, 의료업'
+                }
+            ];
+        }
+    </script>
+</body>
+</html>
